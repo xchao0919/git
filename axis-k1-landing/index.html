@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AXIS K1 — Industrial Control Handle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & GLOBAL ============ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Geist', 'Noto Sans SC', system-ui, -apple-system, 'PingFang SC', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ============ VERSION SWITCHER ============ */
+.switcher {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 9999;
+  display: inline-flex; align-items: center;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px; letter-spacing: 0.04em;
+}
+.switcher button {
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: #666;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.switcher button.active { background: #0a0a0a; color: #fff; }
+.switcher .label { padding: 0 12px; color: #999; font-size: 10px; }
+
+.version { display: none; }
+.version.active { display: block; }
+
+/* ==================================================== */
+/*   VERSION A — APEX (LIGHT, APPLE-STYLE MINIMAL)      */
+/* ==================================================== */
+
+.apex {
+  --apex-bg: #F5F4F1;
+  --apex-paper: #FFFFFF;
+  --apex-ink: #0A0A0A;
+  --apex-ink-2: #1C1C1C;
+  --apex-mute: #71706C;
+  --apex-line: #E2E0DA;
+  --apex-accent: #C8553D;
+  background: var(--apex-bg);
+  color: var(--apex-ink);
+  font-family: 'Geist', 'Noto Sans SC', system-ui, -apple-system, 'PingFang SC', sans-serif;
+  min-height: 100vh;
+}
+.apex section { padding: 0 48px; }
+@media (max-width: 768px) { .apex section { padding: 0 24px; } }
+
+.apex .display {
+  font-family: 'Bricolage Grotesque', 'Geist', 'Noto Sans SC', sans-serif;
+  font-weight: 500;
+  font-stretch: 92%;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+.apex .mono { font-family: 'Geist Mono', monospace; letter-spacing: 0.02em; }
+.apex .cn { font-family: 'Noto Sans SC', sans-serif; font-weight: 400; }
+
+/* --- APEX Nav --- */
+.apex-nav {
+  position: sticky; top: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px; padding: 0 48px;
+  background: rgba(245,244,241,0.78);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--apex-line);
+  z-index: 100;
+}
+.apex-logo { font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 500; letter-spacing: 0.18em; }
+.apex-logo span { color: var(--apex-mute); margin-left: 8px; font-weight: 400; }
+.apex-nav-links { display: flex; gap: 36px; font-size: 13px; color: var(--apex-mute); }
+.apex-nav-links a:hover { color: var(--apex-ink); }
+.apex-nav-cta {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  padding: 9px 18px; border-radius: 999px;
+  background: var(--apex-ink); color: white;
+  letter-spacing: 0.06em;
+  transition: transform 0.2s;
+}
+.apex-nav-cta:hover { transform: translateY(-1px); }
+
+/* --- APEX Hero --- */
+.apex-hero {
+  position: relative;
+  padding: 120px 48px 0;
+  min-height: calc(100vh - 72px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 80px;
+}
+.apex-hero-meta {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  font-size: 12px; color: var(--apex-mute);
+}
+.apex-hero-meta .left { display: flex; gap: 32px; }
+.apex-hero-meta .left .item span { display: block; color: var(--apex-ink); margin-top: 4px; font-weight: 500; }
+.apex-hero h1 {
+  font-size: clamp(72px, 14vw, 220px);
+  font-weight: 500;
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-stretch: 90%;
+}
+.apex-hero h1 .accent {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--apex-accent);
+  font-family: 'Bricolage Grotesque', serif;
+}
+.apex-hero-bottom {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
+  padding-bottom: 60px;
+}
+.apex-hero-tagline {
+  font-size: 13px; color: var(--apex-mute);
+  line-height: 1.6;
+  max-width: 360px;
+}
+.apex-hero-tagline strong { color: var(--apex-ink); font-weight: 500; }
+.apex-hero-cta-row {
+  display: flex; gap: 16px; justify-content: flex-end;
+}
+.apex-btn-primary {
+  font-family: 'Geist Mono', monospace; font-size: 13px;
+  padding: 18px 36px; border-radius: 999px;
+  background: var(--apex-ink); color: white;
+  display: inline-flex; align-items: center; gap: 12px;
+  letter-spacing: 0.06em;
+  transition: all 0.25s;
+}
+.apex-btn-primary:hover { background: var(--apex-accent); transform: translateY(-2px); }
+.apex-btn-secondary {
+  font-family: 'Geist Mono', monospace; font-size: 13px;
+  padding: 18px 36px; border-radius: 999px;
+  border: 1px solid var(--apex-ink);
+  color: var(--apex-ink);
+  letter-spacing: 0.06em;
+  transition: all 0.25s;
+}
+.apex-btn-secondary:hover { background: var(--apex-ink); color: white; }
+
+/* --- APEX Product Visual --- */
+.apex-visual {
+  background: var(--apex-paper);
+  margin: 0 48px;
+  border-radius: 24px;
+  padding: 80px 60px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 600px;
+  overflow: hidden;
+}
+.apex-visual-placeholder {
+  width: 100%; max-width: 760px; aspect-ratio: 16/10;
+  background: linear-gradient(135deg, #E8E5DD 0%, #D6D2C8 100%);
+  border-radius: 16px;
+  display: grid; place-items: center;
+  position: relative;
+}
+.apex-visual-placeholder::before {
+  content: ""; position: absolute; inset: 24px;
+  border: 1px dashed rgba(0,0,0,0.18);
+  border-radius: 8px;
+}
+.apex-visual-placeholder .label {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  color: rgba(0,0,0,0.4);
+  letter-spacing: 0.18em;
+}
+/* Inline SVG joystick illustration */
+.apex-joystick {
+  width: 56%; max-width: 480px;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.18));
+}
+.apex-visual-meta {
+  position: absolute;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: var(--apex-mute);
+  letter-spacing: 0.12em;
+}
+.apex-visual-meta.top-left { top: 32px; left: 36px; }
+.apex-visual-meta.top-right { top: 32px; right: 36px; }
+.apex-visual-meta.bot-left { bottom: 32px; left: 36px; }
+.apex-visual-meta.bot-right { bottom: 32px; right: 36px; }
+
+/* --- APEX Section: Specs --- */
+.apex-section { padding: 160px 48px; }
+.apex-section-header {
+  display: grid; grid-template-columns: 1fr 2fr; gap: 80px;
+  margin-bottom: 80px; align-items: end;
+}
+.apex-section-tag {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  color: var(--apex-mute); letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.apex-section-tag::before {
+  content: ""; display: inline-block; width: 24px; height: 1px;
+  background: var(--apex-mute); margin-right: 12px; vertical-align: middle;
+}
+.apex-section h2 {
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 500;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+.apex-section h2 em {
+  font-style: italic; font-weight: 400; color: var(--apex-accent);
+}
+
+.apex-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--apex-line);
+}
+.apex-spec {
+  padding: 48px 32px 48px 0;
+  border-right: 1px solid var(--apex-line);
+  border-bottom: 1px solid var(--apex-line);
+}
+.apex-spec:nth-child(4n) { border-right: none; }
+.apex-spec-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 64px; font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.apex-spec-num .unit { font-size: 22px; color: var(--apex-mute); margin-left: 4px; font-weight: 400; }
+.apex-spec-label-en {
+  margin-top: 32px;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  letter-spacing: 0.16em; color: var(--apex-mute);
+  text-transform: uppercase;
+}
+.apex-spec-label-cn {
+  margin-top: 6px;
+  font-family: 'Noto Sans SC', sans-serif; font-size: 14px;
+  color: var(--apex-ink-2);
+}
+
+@media (max-width: 768px) {
+  .apex-spec-grid { grid-template-columns: repeat(2, 1fr); }
+  .apex-spec:nth-child(4n) { border-right: 1px solid var(--apex-line); }
+  .apex-spec:nth-child(2n) { border-right: none; }
+}
+
+/* --- APEX Section: Features --- */
+.apex-features {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 64px;
+  margin-top: 60px;
+}
+.apex-feature-list { display: flex; flex-direction: column; gap: 0; }
+.apex-feature {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--apex-line);
+  display: grid; grid-template-columns: 36px 1fr 24px;
+  gap: 24px; align-items: start;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.apex-feature:hover { background: rgba(0,0,0,0.02); padding-left: 16px; padding-right: 16px; margin-left: -16px; margin-right: -16px; }
+.apex-feature-num {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  color: var(--apex-mute); padding-top: 4px;
+}
+.apex-feature-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px; font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.apex-feature-desc {
+  font-size: 13px; color: var(--apex-mute); line-height: 1.6;
+  max-width: 420px;
+}
+.apex-feature-arrow {
+  font-family: 'Geist Mono', monospace; padding-top: 4px;
+  transform: rotate(-45deg); transition: transform 0.3s;
+}
+.apex-feature:hover .apex-feature-arrow { transform: rotate(0deg); }
+
+.apex-feature-visual {
+  background: var(--apex-paper);
+  border-radius: 20px;
+  position: sticky; top: 100px;
+  aspect-ratio: 4/3;
+  display: grid; place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.apex-feature-visual::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.apex-feature-visual-content {
+  position: relative; z-index: 2;
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  .apex-features { grid-template-columns: 1fr; }
+  .apex-feature-visual { position: static; }
+}
+
+/* --- APEX Section: Scenarios --- */
+.apex-scenarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+.apex-scenario {
+  background: var(--apex-paper);
+  border-radius: 20px;
+  padding: 36px;
+  aspect-ratio: 3/4;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.apex-scenario:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+.apex-scenario-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 96px; font-weight: 400; line-height: 1;
+  letter-spacing: -0.04em; color: var(--apex-accent);
+  font-style: italic;
+}
+.apex-scenario-name-en {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 28px; font-weight: 500;
+  letter-spacing: -0.02em; line-height: 1.05;
+  margin-bottom: 8px;
+}
+.apex-scenario-name-cn {
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  letter-spacing: 0.16em; color: var(--apex-mute);
+  text-transform: uppercase;
+}
+.apex-scenario-desc {
+  font-size: 13px; color: var(--apex-mute); line-height: 1.55;
+  margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+  .apex-scenarios { grid-template-columns: 1fr; }
+  .apex-scenario { aspect-ratio: 16/9; }
+}
+
+/* --- APEX CTA --- */
+.apex-cta {
+  background: var(--apex-ink);
+  color: white;
+  margin: 0 48px 48px;
+  border-radius: 32px;
+  padding: 120px 80px;
+  position: relative; overflow: hidden;
+}
+.apex-cta-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; align-items: end; }
+.apex-cta h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(44px, 6vw, 88px);
+  font-weight: 500; line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.apex-cta h2 em { font-style: italic; font-weight: 400; color: #E8927C; }
+.apex-cta-form {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.apex-cta-form-row {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.08); border-radius: 999px;
+  padding: 6px 6px 6px 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.apex-cta-form-row input {
+  background: transparent; border: none; outline: none; color: white;
+  flex: 1; padding: 14px 0; font-family: inherit; font-size: 14px;
+}
+.apex-cta-form-row input::placeholder { color: rgba(255,255,255,0.4); }
+.apex-cta-form-row button {
+  background: white; color: var(--apex-ink);
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  padding: 12px 24px; border-radius: 999px;
+  letter-spacing: 0.08em;
+}
+.apex-cta-meta {
+  margin-top: 16px;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: rgba(255,255,255,0.4); letter-spacing: 0.12em;
+}
+
+/* --- APEX Footer --- */
+.apex-footer {
+  padding: 48px;
+  border-top: 1px solid var(--apex-line);
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+}
+.apex-footer-brand {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 32px; font-weight: 500; letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.apex-footer h4 {
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  letter-spacing: 0.18em; color: var(--apex-mute);
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.apex-footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.apex-footer-col a { font-size: 13px; color: var(--apex-ink-2); }
+.apex-footer-col a:hover { color: var(--apex-accent); }
+.apex-footer-bottom {
+  margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--apex-line);
+  display: flex; justify-content: space-between;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: var(--apex-mute); letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  .apex-footer { grid-template-columns: 1fr 1fr; }
+}
+
+/* ==================================================== */
+/*   VERSION B — FORGE (DARK, HEAVY-DUTY INDUSTRIAL)    */
+/* ==================================================== */
+
+.forge {
+  --f-bg: #0A0B0D;
+  --f-surface: #131418;
+  --f-surface-2: #1B1D22;
+  --f-line: #25282E;
+  --f-ink: #F5F4F0;
+  --f-ink-2: #C5C4BE;
+  --f-mute: #6E7077;
+  --f-accent: #FF5C00;
+  --f-accent-2: #FFD83A;
+  background: var(--f-bg);
+  color: var(--f-ink);
+  font-family: 'Geist', 'Noto Sans SC', system-ui, sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+.forge::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.forge > * { position: relative; z-index: 2; }
+
+.forge .display { font-family: 'Geist', sans-serif; font-weight: 700; letter-spacing: -0.04em; line-height: 0.92; }
+.forge .mono { font-family: 'Geist Mono', monospace; }
+.forge .cn { font-family: 'Noto Sans SC', sans-serif; font-weight: 400; }
+
+/* --- FORGE Nav --- */
+.forge-nav {
+  position: sticky; top: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+  height: 64px;
+  background: rgba(10,11,13,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--f-line);
+  z-index: 100;
+  font-size: 13px;
+}
+.forge-logo {
+  font-family: 'Geist Mono', monospace;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.22em;
+  display: flex; align-items: center; gap: 12px;
+}
+.forge-logo .badge {
+  display: inline-block; width: 8px; height: 8px;
+  background: var(--f-accent); border-radius: 1px;
+  box-shadow: 0 0 12px var(--f-accent);
+}
+.forge-nav-links { display: flex; gap: 28px; color: var(--f-ink-2); font-size: 12px; font-family: 'Geist Mono', monospace; letter-spacing: 0.08em; }
+.forge-nav-links a:hover { color: var(--f-accent); }
+.forge-nav-status {
+  display: flex; align-items: center; gap: 16px;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: var(--f-mute); letter-spacing: 0.1em;
+}
+.forge-nav-status .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4ADE80; box-shadow: 0 0 8px #4ADE80;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+
+/* --- FORGE Hero --- */
+.forge-hero {
+  padding: 80px 32px 0;
+  min-height: calc(100vh - 64px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+}
+.forge-hero-tags {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  letter-spacing: 0.16em;
+}
+.forge-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--f-line);
+  border-radius: 4px;
+  color: var(--f-ink-2);
+  text-transform: uppercase;
+}
+.forge-tag.accent { border-color: var(--f-accent); color: var(--f-accent); }
+.forge-tag .ico { width: 6px; height: 6px; background: currentColor; border-radius: 1px; }
+
+.forge-hero-main {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 60px;
+  align-items: end;
+  padding-bottom: 60px;
+}
+.forge-hero h1 {
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(64px, 11vw, 184px);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+}
+.forge-hero h1 .line2 {
+  display: block;
+  color: var(--f-mute);
+  font-weight: 300;
+}
+.forge-hero h1 .accent-block {
+  display: inline-block;
+  background: var(--f-accent); color: var(--f-bg);
+  padding: 0 20px;
+  font-style: italic;
+  font-weight: 600;
+  transform: skew(-6deg);
+}
+.forge-hero-side {
+  display: flex; flex-direction: column; gap: 32px;
+  padding-bottom: 12px;
+}
+.forge-hero-tagline {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px; line-height: 1.7;
+  color: var(--f-ink-2);
+  border-left: 2px solid var(--f-accent);
+  padding-left: 20px;
+}
+.forge-hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.forge-btn-primary {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  padding: 16px 24px;
+  background: var(--f-accent); color: var(--f-bg);
+  letter-spacing: 0.12em; font-weight: 600;
+  border-radius: 2px;
+  display: inline-flex; align-items: center; gap: 12px;
+  transition: all 0.2s;
+  position: relative;
+  text-transform: uppercase;
+}
+.forge-btn-primary:hover {
+  background: var(--f-ink); color: var(--f-bg);
+  transform: translateX(4px);
+}
+.forge-btn-primary::after {
+  content: ""; position: absolute; right: -4px; top: -4px;
+  width: 8px; height: 8px; border: 2px solid var(--f-accent);
+  border-left: none; border-bottom: none;
+}
+.forge-btn-secondary {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  padding: 16px 24px;
+  border: 1px solid var(--f-line);
+  color: var(--f-ink); letter-spacing: 0.12em; font-weight: 500;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.forge-btn-secondary:hover { border-color: var(--f-accent); color: var(--f-accent); }
+
+/* --- FORGE Hero Visual --- */
+.forge-visual {
+  background: var(--f-surface);
+  margin: 0 32px 32px;
+  padding: 48px;
+  position: relative;
+  border: 1px solid var(--f-line);
+  display: grid;
+  grid-template-columns: 240px 1fr 240px;
+  gap: 32px;
+  align-items: center;
+  min-height: 520px;
+}
+.forge-visual-left, .forge-visual-right {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.forge-data-cell {
+  border: 1px solid var(--f-line);
+  padding: 16px;
+  background: var(--f-bg);
+}
+.forge-data-cell .label {
+  font-family: 'Geist Mono', monospace; font-size: 10px;
+  color: var(--f-mute); letter-spacing: 0.16em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.forge-data-cell .value {
+  font-family: 'Geist Mono', monospace; font-size: 18px;
+  color: var(--f-ink); font-weight: 500;
+}
+.forge-data-cell .value .unit { color: var(--f-mute); font-size: 12px; margin-left: 4px; }
+.forge-data-cell.live .value { color: var(--f-accent); }
+
+.forge-visual-center {
+  display: grid; place-items: center; position: relative;
+  height: 100%;
+}
+.forge-visual-center::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at center, rgba(255,92,0,0.15), transparent 70%);
+}
+.forge-joystick-frame {
+  position: relative;
+  width: 100%; max-width: 480px;
+  aspect-ratio: 4/3;
+  display: grid; place-items: center;
+}
+.forge-joystick-frame::before, .forge-joystick-frame::after {
+  content: ""; position: absolute;
+  width: 24px; height: 24px;
+  border: 1px solid var(--f-accent);
+}
+.forge-joystick-frame::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+.forge-joystick-frame::after  { bottom: 0; right: 0; border-left: none; border-top: none; }
+.forge-joystick-corners > div {
+  position: absolute;
+  width: 24px; height: 24px;
+  border: 1px solid var(--f-accent);
+}
+.forge-joystick-corners .tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+.forge-joystick-corners .bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+
+.forge-visual-meta {
+  position: absolute;
+  font-family: 'Geist Mono', monospace; font-size: 10px;
+  color: var(--f-mute); letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.forge-visual-meta.t { top: 16px; left: 50%; transform: translateX(-50%); }
+.forge-visual-meta.b { bottom: 16px; left: 50%; transform: translateX(-50%); }
+
+/* --- FORGE Section --- */
+.forge-section { padding: 140px 32px; }
+.forge-section-header {
+  margin-bottom: 80px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;
+}
+.forge-section-tag {
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: var(--f-accent); letter-spacing: 0.22em;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 12px;
+}
+.forge-section-tag .num { color: var(--f-mute); }
+.forge-section-tag::before {
+  content: ""; width: 8px; height: 8px;
+  background: var(--f-accent); display: inline-block;
+}
+.forge-section h2 {
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(40px, 6vw, 88px);
+  font-weight: 700; line-height: 0.95;
+  letter-spacing: -0.035em;
+  margin-top: 24px;
+}
+.forge-section h2 .stroke {
+  -webkit-text-stroke: 1px var(--f-ink);
+  color: transparent;
+  font-style: italic;
+  font-weight: 400;
+}
+.forge-section-desc {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; line-height: 1.75;
+  color: var(--f-ink-2);
+  max-width: 460px;
+}
+
+/* --- FORGE Specs Grid --- */
+.forge-specs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--f-line);
+  border-left: 1px solid var(--f-line);
+}
+.forge-spec {
+  border-right: 1px solid var(--f-line);
+  border-bottom: 1px solid var(--f-line);
+  padding: 36px 28px;
+  position: relative;
+  transition: background 0.25s;
+  cursor: pointer;
+  min-height: 220px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.forge-spec:hover { background: var(--f-surface); }
+.forge-spec-id {
+  font-family: 'Geist Mono', monospace; font-size: 10px;
+  color: var(--f-mute); letter-spacing: 0.16em;
+}
+.forge-spec-num {
+  font-family: 'Geist', sans-serif;
+  font-size: 56px; font-weight: 700;
+  letter-spacing: -0.04em; line-height: 1;
+  margin-top: 24px;
+}
+.forge-spec-num .unit {
+  font-size: 18px; color: var(--f-mute);
+  font-weight: 400; margin-left: 4px;
+}
+.forge-spec-num.accent { color: var(--f-accent); }
+.forge-spec-label {
+  margin-top: 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.forge-spec-label .en {
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: var(--f-ink-2); letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.forge-spec-label .cn {
+  font-family: 'Noto Sans SC', sans-serif; font-size: 12px;
+  color: var(--f-mute);
+}
+
+@media (max-width: 768px) {
+  .forge-specs { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- FORGE Anatomy / Features --- */
+.forge-anatomy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 60px;
+}
+.forge-anatomy-visual {
+  background: var(--f-surface);
+  border: 1px solid var(--f-line);
+  aspect-ratio: 1;
+  position: relative;
+  display: grid; place-items: center;
+  overflow: hidden;
+}
+.forge-anatomy-visual::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.forge-anatomy-visual::after {
+  content: "";
+  position: absolute; inset: 32px;
+  border: 1px dashed rgba(255,92,0,0.3);
+}
+.forge-anatomy-list { display: flex; flex-direction: column; }
+.forge-anatomy-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--f-line);
+  align-items: center;
+  cursor: pointer;
+  transition: padding-left 0.3s;
+}
+.forge-anatomy-row:first-child { border-top: 1px solid var(--f-line); }
+.forge-anatomy-row:hover {
+  padding-left: 16px;
+  background: linear-gradient(90deg, rgba(255,92,0,0.06), transparent 60%);
+}
+.forge-anatomy-row .num {
+  font-family: 'Geist Mono', monospace;
+  font-size: 24px; color: var(--f-accent); font-weight: 600;
+}
+.forge-anatomy-row .text .en {
+  font-family: 'Geist', sans-serif; font-size: 20px; font-weight: 600;
+  letter-spacing: -0.01em; margin-bottom: 4px;
+}
+.forge-anatomy-row .text .cn {
+  font-family: 'Noto Sans SC', sans-serif; font-size: 13px;
+  color: var(--f-mute); line-height: 1.5;
+}
+.forge-anatomy-row .arrow {
+  font-family: 'Geist Mono', monospace; font-size: 18px;
+  color: var(--f-mute);
+  transition: transform 0.3s, color 0.3s;
+}
+.forge-anatomy-row:hover .arrow { color: var(--f-accent); transform: translateX(4px); }
+
+@media (max-width: 900px) {
+  .forge-anatomy { grid-template-columns: 1fr; }
+}
+
+/* --- FORGE Scenarios --- */
+.forge-scenarios {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--f-line);
+  border: 1px solid var(--f-line);
+  margin-top: 60px;
+}
+.forge-scenario {
+  background: var(--f-bg);
+  padding: 48px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  min-height: 320px;
+  position: relative;
+  transition: background 0.25s;
+  cursor: pointer;
+}
+.forge-scenario:hover { background: var(--f-surface); }
+.forge-scenario-info { display: flex; flex-direction: column; justify-content: space-between; }
+.forge-scenario-id {
+  font-family: 'Geist Mono', monospace; font-size: 10px;
+  color: var(--f-mute); letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.forge-scenario-name-en {
+  font-family: 'Geist', sans-serif;
+  font-size: 36px; font-weight: 700;
+  letter-spacing: -0.03em; line-height: 1;
+  margin-top: 16px;
+}
+.forge-scenario-name-cn {
+  margin-top: 12px;
+  font-family: 'Noto Sans SC', sans-serif; font-size: 14px;
+  color: var(--f-ink-2);
+}
+.forge-scenario-desc {
+  font-family: 'Noto Sans SC', sans-serif; font-size: 12px;
+  color: var(--f-mute); line-height: 1.6;
+  margin-top: 12px;
+}
+.forge-scenario-icon {
+  display: grid; place-items: center;
+  border-left: 1px solid var(--f-line);
+  padding-left: 24px;
+}
+
+@media (max-width: 768px) {
+  .forge-scenarios { grid-template-columns: 1fr; }
+}
+
+/* --- FORGE Comparison Strip --- */
+.forge-comparison {
+  margin: 0 32px;
+  background: var(--f-accent);
+  color: var(--f-bg);
+  padding: 60px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.forge-comparison::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(0,0,0,0.06) 60px, rgba(0,0,0,0.06) 62px);
+  pointer-events: none;
+}
+.forge-comparison > * { position: relative; z-index: 2; }
+.forge-comparison-heading {
+  font-family: 'Geist', sans-serif;
+  font-size: 32px; font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1;
+}
+.forge-comparison-heading .small {
+  display: block; font-size: 12px; font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.16em; font-weight: 500; margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.forge-comparison-stat .num {
+  font-family: 'Geist', sans-serif;
+  font-size: 72px; font-weight: 700;
+  letter-spacing: -0.04em; line-height: 1;
+}
+.forge-comparison-stat .label {
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  letter-spacing: 0.14em; margin-top: 8px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) { .forge-comparison { grid-template-columns: 1fr; } }
+
+/* --- FORGE CTA --- */
+.forge-cta {
+  padding: 140px 32px;
+  text-align: center;
+  border-top: 1px solid var(--f-line);
+  position: relative;
+}
+.forge-cta-pre {
+  font-family: 'Geist Mono', monospace; font-size: 12px;
+  color: var(--f-accent); letter-spacing: 0.2em;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.forge-cta-pre::before, .forge-cta-pre::after {
+  content: ""; width: 32px; height: 1px; background: var(--f-accent);
+}
+.forge-cta h2 {
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(48px, 9vw, 144px);
+  font-weight: 700; line-height: 0.9;
+  letter-spacing: -0.045em;
+  max-width: 1200px; margin: 0 auto;
+}
+.forge-cta h2 em {
+  font-style: italic; font-weight: 400;
+  color: var(--f-accent);
+}
+.forge-cta-row {
+  margin-top: 60px;
+  display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+}
+
+/* --- FORGE Footer --- */
+.forge-footer {
+  border-top: 1px solid var(--f-line);
+  padding: 60px 32px 32px;
+}
+.forge-footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--f-line);
+}
+.forge-footer-brand {
+  font-family: 'Geist Mono', monospace;
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 0.22em;
+}
+.forge-footer-tagline {
+  margin-top: 16px;
+  font-family: 'Noto Sans SC', sans-serif; font-size: 13px;
+  color: var(--f-mute); line-height: 1.6;
+  max-width: 320px;
+}
+.forge-footer h4 {
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  color: var(--f-accent); letter-spacing: 0.18em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.forge-footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.forge-footer ul a { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--f-ink-2); letter-spacing: 0.06em; text-transform: uppercase; }
+.forge-footer ul a:hover { color: var(--f-accent); }
+.forge-footer-bottom {
+  margin-top: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Geist Mono', monospace; font-size: 10px;
+  color: var(--f-mute); letter-spacing: 0.14em;
+}
+
+@media (max-width: 768px) {
+  .forge-footer-top { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ VERSION SWITCHER ============ -->
+<div class="switcher">
+  <span class="label">VARIANT</span>
+  <button data-version="apex" class="active">A · APEX</button>
+  <button data-version="forge">B · FORGE</button>
+</div>
+
+<!-- ============ SHARED SVG ICONS / DEFS ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Joystick illustration (light bg, used by APEX) -->
+    <symbol id="joystick-light" viewBox="0 0 480 360">
+      <!-- Base body -->
+      <rect x="60" y="180" width="360" height="120" rx="60" fill="#1A1A1A"/>
+      <rect x="60" y="180" width="360" height="120" rx="60" fill="url(#metalLight)" opacity="0.28"/>
+      <!-- Top deck -->
+      <rect x="80" y="160" width="320" height="40" rx="20" fill="#2A2A2A"/>
+      <!-- Stick -->
+      <rect x="220" y="60" width="40" height="120" rx="20" fill="#1A1A1A"/>
+      <circle cx="240" cy="60" r="48" fill="#0A0A0A"/>
+      <circle cx="240" cy="60" r="44" fill="url(#metalLight)" opacity="0.5"/>
+      <circle cx="240" cy="50" r="8" fill="#C8553D"/>
+      <!-- Buttons -->
+      <circle cx="120" cy="240" r="14" fill="#0A0A0A"/>
+      <circle cx="120" cy="240" r="11" fill="#C8553D"/>
+      <circle cx="160" cy="240" r="14" fill="#0A0A0A"/>
+      <circle cx="160" cy="240" r="11" fill="#FAFAF7"/>
+      <circle cx="320" cy="240" r="14" fill="#0A0A0A"/>
+      <circle cx="320" cy="240" r="11" fill="#FAFAF7"/>
+      <circle cx="360" cy="240" r="14" fill="#0A0A0A"/>
+      <circle cx="360" cy="240" r="11" fill="#FAFAF7"/>
+      <!-- Toggle switches -->
+      <rect x="200" y="225" width="32" height="14" rx="3" fill="#0A0A0A"/>
+      <rect x="248" y="225" width="32" height="14" rx="3" fill="#0A0A0A"/>
+      <rect x="200" y="252" width="80" height="14" rx="3" fill="#0A0A0A"/>
+      <!-- Mounting flanges -->
+      <rect x="40" y="270" width="40" height="20" rx="2" fill="#1A1A1A"/>
+      <rect x="400" y="270" width="40" height="20" rx="2" fill="#1A1A1A"/>
+      <circle cx="60" cy="280" r="4" fill="#444"/>
+      <circle cx="420" cy="280" r="4" fill="#444"/>
+      <defs>
+        <linearGradient id="metalLight" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#666"/>
+          <stop offset="0.5" stop-color="#fff"/>
+          <stop offset="1" stop-color="#222"/>
+        </linearGradient>
+      </defs>
+    </symbol>
+
+    <!-- Joystick line-art (used by FORGE - blueprint style) -->
+    <symbol id="joystick-blueprint" viewBox="0 0 480 360">
+      <g fill="none" stroke="#FF5C00" stroke-width="1.4" stroke-linejoin="round">
+        <!-- Base body outline -->
+        <rect x="60" y="180" width="360" height="120" rx="60"/>
+        <line x1="60" y1="220" x2="420" y2="220" stroke-dasharray="2 4"/>
+        <line x1="60" y1="260" x2="420" y2="260" stroke-dasharray="2 4"/>
+        <!-- Top deck -->
+        <rect x="80" y="160" width="320" height="40" rx="20"/>
+        <!-- Stick & ball -->
+        <rect x="220" y="60" width="40" height="120" rx="20"/>
+        <circle cx="240" cy="60" r="48"/>
+        <circle cx="240" cy="60" r="32"/>
+        <circle cx="240" cy="60" r="8" fill="#FF5C00"/>
+        <!-- Range indicator arcs -->
+        <path d="M160 60 Q240 -20 320 60" stroke-dasharray="3 5" opacity="0.5"/>
+        <path d="M180 60 Q240 0 300 60" stroke-dasharray="3 5" opacity="0.4"/>
+        <!-- Crosshair lines -->
+        <line x1="240" y1="20" x2="240" y2="100"/>
+        <line x1="200" y1="60" x2="280" y2="60"/>
+        <!-- Buttons -->
+        <circle cx="120" cy="240" r="14"/>
+        <circle cx="160" cy="240" r="14"/>
+        <circle cx="320" cy="240" r="14"/>
+        <circle cx="360" cy="240" r="14"/>
+        <circle cx="120" cy="240" r="6" fill="#FF5C00"/>
+        <!-- Switch slots -->
+        <rect x="200" y="225" width="32" height="14" rx="2"/>
+        <rect x="248" y="225" width="32" height="14" rx="2"/>
+        <rect x="200" y="252" width="80" height="14" rx="2"/>
+        <line x1="216" y1="225" x2="216" y2="239" stroke-width="2"/>
+        <line x1="264" y1="225" x2="264" y2="239" stroke-width="2"/>
+        <!-- Flanges -->
+        <rect x="40" y="270" width="40" height="20" rx="2"/>
+        <rect x="400" y="270" width="40" height="20" rx="2"/>
+        <circle cx="60" cy="280" r="4"/>
+        <circle cx="420" cy="280" r="4"/>
+        <!-- Dimension labels -->
+        <line x1="60" y1="320" x2="420" y2="320" stroke-dasharray="2 3" opacity="0.5"/>
+        <text x="240" y="335" font-family="monospace" font-size="11" fill="#FF5C00" text-anchor="middle" stroke="none">360 mm</text>
+        <line x1="50" y1="180" x2="50" y2="300" stroke-dasharray="2 3" opacity="0.5"/>
+        <text x="20" y="244" font-family="monospace" font-size="11" fill="#FF5C00" stroke="none">120</text>
+      </g>
+    </symbol>
+
+    <!-- Application scenario icons -->
+    <symbol id="ico-crane" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="8" y1="56" x2="56" y2="56"/>
+        <rect x="20" y="40" width="14" height="16"/>
+        <line x1="27" y1="40" x2="27" y2="8"/>
+        <line x1="27" y1="8" x2="56" y2="8"/>
+        <line x1="48" y1="8" x2="48" y2="36"/>
+        <rect x="44" y="36" width="8" height="6"/>
+      </g>
+    </symbol>
+    <symbol id="ico-excavator" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="16" cy="50" r="6"/>
+        <circle cx="38" cy="50" r="6"/>
+        <line x1="10" y1="50" x2="44" y2="50"/>
+        <rect x="14" y="34" width="20" height="14"/>
+        <line x1="34" y1="38" x2="50" y2="22"/>
+        <line x1="50" y1="22" x2="56" y2="32"/>
+        <path d="M50 32 L58 36 L52 42 Z"/>
+      </g>
+    </symbol>
+    <symbol id="ico-port" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="8" y="40" width="48" height="8"/>
+        <rect x="14" y="32" width="14" height="8"/>
+        <rect x="36" y="28" width="14" height="12"/>
+        <line x1="8" y1="56" x2="56" y2="56"/>
+        <path d="M4 48 Q12 52 20 48 T36 48 T52 48 T60 48"/>
+      </g>
+    </symbol>
+    <symbol id="ico-agri" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="16" cy="50" r="8"/>
+        <circle cx="46" cy="50" r="6"/>
+        <rect x="20" y="32" width="22" height="14"/>
+        <path d="M42 32 L52 32 L52 42 L46 42"/>
+        <line x1="22" y1="32" x2="22" y2="22"/>
+        <line x1="22" y1="22" x2="36" y2="22"/>
+      </g>
+    </symbol>
+    <symbol id="ico-arrow" viewBox="0 0 24 24">
+      <path d="M5 12 L19 12 M13 6 L19 12 L13 18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- ============================================================ -->
+<!--                   VERSION A — APEX                           -->
+<!-- ============================================================ -->
+<div class="version active apex" data-version="apex">
+  <nav class="apex-nav">
+    <div class="apex-logo">AXIS<span>// CONTROL SYSTEMS</span></div>
+    <div class="apex-nav-links">
+      <a href="#product">Product</a>
+      <a href="#specs">Specifications</a>
+      <a href="#scenarios">Applications</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="apex-nav-cta">REQUEST QUOTE →</a>
+  </nav>
+
+  <header class="apex-hero">
+    <div class="apex-hero-meta">
+      <div class="left">
+        <div class="item">SERIES <span>K1 / 2025</span></div>
+        <div class="item">CATEGORY <span>Industrial Joystick</span></div>
+        <div class="item">CERT <span>CE · IEC 60204-1</span></div>
+      </div>
+      <div class="mono">SCROLL ↓</div>
+    </div>
+
+    <h1>
+      Built for the <span class="accent">Heavy</span><br>
+      Hand of Industry.
+    </h1>
+
+    <div class="apex-hero-bottom">
+      <p class="apex-hero-tagline">
+        <strong>AXIS K1</strong> 是为重型工程机械、起重设备与远程控制系统打造的工业级控制手柄。<br>
+        Hall-effect sticks, full-metal chassis, IP67 sealed — engineered to last a decade.
+      </p>
+      <div class="apex-hero-cta-row">
+        <a href="#specs" class="apex-btn-primary">EXPLORE K1 →</a>
+        <a href="#contact" class="apex-btn-secondary">DOWNLOAD SPEC</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Visual -->
+  <section class="apex-visual">
+    <div class="apex-visual-meta top-left">FIG. 01 / K1-X</div>
+    <div class="apex-visual-meta top-right">FRONT VIEW · 1:1.5</div>
+    <div class="apex-visual-meta bot-left">© AXIS 2025</div>
+    <div class="apex-visual-meta bot-right">REV / A.04</div>
+    <svg class="apex-joystick" viewBox="0 0 480 360"><use href="#joystick-light"/></svg>
+  </section>
+
+  <!-- Specs -->
+  <section class="apex-section" id="specs">
+    <div class="apex-section-header">
+      <div class="apex-section-tag">02 — Specifications</div>
+      <h2>Tolerances that <em>refuse</em> compromise.</h2>
+    </div>
+
+    <div class="apex-spec-grid">
+      <div class="apex-spec">
+        <div class="apex-spec-num">IP67<span class="unit"></span></div>
+        <div class="apex-spec-label-en">PROTECTION RATING</div>
+        <div class="apex-spec-label-cn">防尘 / 防短时浸水</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">5M<span class="unit">cycles</span></div>
+        <div class="apex-spec-label-en">SWITCH LIFETIME</div>
+        <div class="apex-spec-label-cn">五百万次按键寿命</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">±0.1<span class="unit">%</span></div>
+        <div class="apex-spec-label-en">POSITIONING ACCURACY</div>
+        <div class="apex-spec-label-cn">霍尔摇杆定位精度</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">125<span class="unit">°C</span></div>
+        <div class="apex-spec-label-en">OPERATING RANGE</div>
+        <div class="apex-spec-label-cn">−40 至 +85°C</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">CAN<span class="unit">2.0B</span></div>
+        <div class="apex-spec-label-en">PROTOCOL SUPPORT</div>
+        <div class="apex-spec-label-cn">CAN / RS485 / USB</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">12<span class="unit">V/24V</span></div>
+        <div class="apex-spec-label-en">POWER INPUT</div>
+        <div class="apex-spec-label-cn">宽电压输入</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">6061<span class="unit">T6</span></div>
+        <div class="apex-spec-label-en">CHASSIS MATERIAL</div>
+        <div class="apex-spec-label-cn">航空级铝合金</div>
+      </div>
+      <div class="apex-spec">
+        <div class="apex-spec-num">10<span class="unit">yr</span></div>
+        <div class="apex-spec-label-en">DESIGN LIFETIME</div>
+        <div class="apex-spec-label-cn">设计使用寿命</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="apex-section" id="product">
+    <div class="apex-section-header">
+      <div class="apex-section-tag">03 — Engineering</div>
+      <h2>Every detail, <em>load-bearing</em>.</h2>
+    </div>
+
+    <div class="apex-features">
+      <div class="apex-feature-list">
+        <div class="apex-feature">
+          <div class="apex-feature-num">01</div>
+          <div>
+            <div class="apex-feature-title">Hall-Effect Joystick / 霍尔效应摇杆</div>
+            <div class="apex-feature-desc">Contactless magnetic sensing. Zero mechanical wear, zero drift across 5 million cycles. Sub-millimeter linearity.</div>
+          </div>
+          <div class="apex-feature-arrow">→</div>
+        </div>
+        <div class="apex-feature">
+          <div class="apex-feature-num">02</div>
+          <div>
+            <div class="apex-feature-title">Forged Aluminum Body / 锻造铝合金机身</div>
+            <div class="apex-feature-desc">CNC-machined from 6061-T6 billet. Anodized in matte slate. Resistant to hydraulic fluid, salt spray, and impact.</div>
+          </div>
+          <div class="apex-feature-arrow">→</div>
+        </div>
+        <div class="apex-feature">
+          <div class="apex-feature-num">03</div>
+          <div>
+            <div class="apex-feature-title">Multi-Protocol Bus / 多协议总线</div>
+            <div class="apex-feature-desc">Native CAN 2.0B, J1939, CANopen, Modbus RTU. USB-C diagnostics. One handle, every fleet.</div>
+          </div>
+          <div class="apex-feature-arrow">→</div>
+        </div>
+        <div class="apex-feature">
+          <div class="apex-feature-num">04</div>
+          <div>
+            <div class="apex-feature-title">Modular Switch Layout / 模块化按键布局</div>
+            <div class="apex-feature-desc">Up to 16 programmable buttons, 4 rocker switches, 2 dead-man triggers. Customized to your application.</div>
+          </div>
+          <div class="apex-feature-arrow">→</div>
+        </div>
+        <div class="apex-feature">
+          <div class="apex-feature-num">05</div>
+          <div>
+            <div class="apex-feature-title">EMC / Functional Safety / 电磁兼容 + 功能安全</div>
+            <div class="apex-feature-desc">EN 13309 / EN 12895 / IEC 61000-6-2. SIL 2 capable variants on request.</div>
+          </div>
+          <div class="apex-feature-arrow">→</div>
+        </div>
+      </div>
+
+      <div class="apex-feature-visual">
+        <div class="apex-feature-visual-content">
+          <svg width="280" viewBox="0 0 480 360"><use href="#joystick-light"/></svg>
+          <div style="margin-top:24px;font-family:'Geist Mono',monospace;font-size:11px;color:#71706C;letter-spacing:0.16em">EXPLODED VIEW · INTERACTIVE →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scenarios -->
+  <section class="apex-section" id="scenarios">
+    <div class="apex-section-header">
+      <div class="apex-section-tag">04 — Applications</div>
+      <h2>Where K1 <em>earns</em> its keep.</h2>
+    </div>
+
+    <div class="apex-scenarios">
+      <div class="apex-scenario">
+        <div>
+          <div class="apex-scenario-num">01</div>
+          <div class="apex-scenario-name-en">Cranes & Hoists</div>
+          <div class="apex-scenario-name-cn">起重 / 吊装</div>
+          <div class="apex-scenario-desc">Tower cranes, mobile cranes, harbor gantries. Smooth, predictable proportional control under load.</div>
+        </div>
+        <div class="apex-scenario-name-cn">→ DEPLOYED IN 1,200+ UNITS</div>
+      </div>
+      <div class="apex-scenario">
+        <div>
+          <div class="apex-scenario-num">02</div>
+          <div class="apex-scenario-name-en">Earth-Moving</div>
+          <div class="apex-scenario-name-cn">土方 / 工程机械</div>
+          <div class="apex-scenario-desc">Excavators, wheel loaders, telehandlers. Fine-grained articulation through hydraulic-grade feedback.</div>
+        </div>
+        <div class="apex-scenario-name-cn">→ COMPATIBLE W/ ALL OEM ECUS</div>
+      </div>
+      <div class="apex-scenario">
+        <div>
+          <div class="apex-scenario-num">03</div>
+          <div class="apex-scenario-name-en">Remote Control</div>
+          <div class="apex-scenario-name-cn">远程 / 遥控操作</div>
+          <div class="apex-scenario-desc">Tele-operation rigs for hazardous environments. Sub-10ms latency over redundant CAN-FD links.</div>
+        </div>
+        <div class="apex-scenario-name-cn">→ RATED FOR EXPLOSIVE ZONES</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="apex-cta" id="contact">
+    <div class="apex-cta-grid">
+      <h2>Tell us what your<br>fleet <em>needs</em>.</h2>
+      <div class="apex-cta-form">
+        <div class="apex-cta-form-row">
+          <input type="email" placeholder="your.work@company.com">
+          <button>REQUEST QUOTE →</button>
+        </div>
+        <div class="apex-cta-meta">RESPONSE WITHIN 1 BUSINESS DAY · NDA AVAILABLE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="apex-footer">
+    <div class="apex-footer-col">
+      <div class="apex-footer-brand">AXIS</div>
+      <div style="font-size:13px;color:#71706C;line-height:1.6;max-width:280px">Industrial-grade control hardware for the machines that move the world.</div>
+    </div>
+    <div class="apex-footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#">K1 Series</a></li>
+        <li><a href="#">K-Mini</a></li>
+        <li><a href="#">Custom OEM</a></li>
+      </ul>
+    </div>
+    <div class="apex-footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Datasheets</a></li>
+        <li><a href="#">CAD / STEP</a></li>
+        <li><a href="#">Compliance</a></li>
+      </ul>
+    </div>
+    <div class="apex-footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Distributors</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="apex-footer-bottom" style="grid-column:1/-1">
+      <span>© 2025 AXIS CONTROL SYSTEMS · CHINA</span>
+      <span>SHENZHEN — STUTTGART — DETROIT</span>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ============================================================ -->
+<!--                   VERSION B — FORGE                          -->
+<!-- ============================================================ -->
+<div class="version forge" data-version="forge">
+  <nav class="forge-nav">
+    <div class="forge-logo">
+      <span class="badge"></span>
+      AXIS // K1
+    </div>
+    <div class="forge-nav-links">
+      <a href="#f-overview">[01] Overview</a>
+      <a href="#f-specs">[02] Specs</a>
+      <a href="#f-anatomy">[03] Anatomy</a>
+      <a href="#f-deploy">[04] Deploy</a>
+    </div>
+    <div class="forge-nav-status">
+      <span class="dot"></span>
+      <span>SHIPPING / Q3·2025</span>
+    </div>
+  </nav>
+
+  <header class="forge-hero" id="f-overview">
+    <div class="forge-hero-tags">
+      <span class="forge-tag accent"><span class="ico"></span>Industrial Joystick</span>
+      <span class="forge-tag">IP67 Sealed</span>
+      <span class="forge-tag">Hall-Effect</span>
+      <span class="forge-tag">CAN 2.0B / J1939</span>
+      <span class="forge-tag">SIL 2 Capable</span>
+    </div>
+
+    <div class="forge-hero-main">
+      <div>
+        <h1>
+          BUILT TO<br>
+          <span class="line2">OUT-LIVE</span><br>
+          THE <span class="accent-block">MACHINE</span>.
+        </h1>
+      </div>
+      <div class="forge-hero-side">
+        <div class="forge-hero-tagline">
+          AXIS K1 是面向重型工程、远程操作与定制工业 OEM 的全金属控制手柄。<br>
+          十年设计寿命，零接触霍尔摇杆，全协议总线接入。
+        </div>
+        <div class="forge-hero-cta-row">
+          <a href="#f-deploy" class="forge-btn-primary">[REQUEST DATASHEET]</a>
+          <a href="#f-specs" class="forge-btn-secondary">VIEW SPECS</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Visual -->
+  <section class="forge-visual">
+    <div class="forge-visual-meta t">FIG. K1-EX-A04 · BLUEPRINT · TOLERANCES IN MM</div>
+    <div class="forge-visual-meta b">© AXIS CONTROL SYSTEMS / 2025 / CONFIDENTIAL · INTERNAL</div>
+    <div class="forge-visual-left">
+      <div class="forge-data-cell">
+        <div class="label">PART · NO</div>
+        <div class="value">K1-IX-360</div>
+      </div>
+      <div class="forge-data-cell">
+        <div class="label">WEIGHT</div>
+        <div class="value">820<span class="unit">g</span></div>
+      </div>
+      <div class="forge-data-cell">
+        <div class="label">DIMENSIONS</div>
+        <div class="value">360 × 120<span class="unit">mm</span></div>
+      </div>
+      <div class="forge-data-cell live">
+        <div class="label">CYCLES TESTED</div>
+        <div class="value" id="forge-cycles">5,000,000+</div>
+      </div>
+    </div>
+    <div class="forge-visual-center">
+      <div class="forge-joystick-frame">
+        <div class="forge-joystick-corners"><div class="tr"></div><div class="bl"></div></div>
+        <svg viewBox="0 0 480 360" style="width:100%;max-width:480px;position:relative;z-index:2"><use href="#joystick-blueprint"/></svg>
+      </div>
+    </div>
+    <div class="forge-visual-right">
+      <div class="forge-data-cell">
+        <div class="label">PROTECTION</div>
+        <div class="value">IP67</div>
+      </div>
+      <div class="forge-data-cell">
+        <div class="label">TEMP · RANGE</div>
+        <div class="value">−40 ~ +85<span class="unit">°C</span></div>
+      </div>
+      <div class="forge-data-cell">
+        <div class="label">PROTOCOL</div>
+        <div class="value">CAN / J1939</div>
+      </div>
+      <div class="forge-data-cell">
+        <div class="label">CERT.</div>
+        <div class="value">CE · IEC · EN</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specs Grid -->
+  <section class="forge-section" id="f-specs">
+    <div class="forge-section-header">
+      <div>
+        <div class="forge-section-tag"><span class="num">02</span> — TECH·SHEET</div>
+        <h2>SPEC<br><span class="stroke">— OVERVIEW</span></h2>
+      </div>
+      <p class="forge-section-desc">
+        每一项指标都来自实测，不是 marketing。所有 K1 出厂前经过 96 小时高低温循环、240 小时盐雾、5 米跌落与 5,000 次连续操作验证。<br>
+        Independently certified by TÜV Rheinland.
+      </p>
+    </div>
+
+    <div class="forge-specs">
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 01</div>
+        <div class="forge-spec-num accent">IP67</div>
+        <div class="forge-spec-label">
+          <span class="en">PROTECTION RATING</span>
+          <span class="cn">防尘 + 短时浸水</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 02</div>
+        <div class="forge-spec-num">5<span class="unit">M cycles</span></div>
+        <div class="forge-spec-label">
+          <span class="en">SWITCH LIFETIME</span>
+          <span class="cn">五百万次按键寿命</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 03</div>
+        <div class="forge-spec-num">±0.1<span class="unit">%</span></div>
+        <div class="forge-spec-label">
+          <span class="en">POSITIONING</span>
+          <span class="cn">霍尔摇杆定位精度</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 04</div>
+        <div class="forge-spec-num accent">125<span class="unit">°C</span></div>
+        <div class="forge-spec-label">
+          <span class="en">OPERATING SPAN</span>
+          <span class="cn">−40 至 +85°C</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 05</div>
+        <div class="forge-spec-num">10<span class="unit">yr</span></div>
+        <div class="forge-spec-label">
+          <span class="en">DESIGN LIFE</span>
+          <span class="cn">设计使用寿命</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 06</div>
+        <div class="forge-spec-num">12<span class="unit">V/24V</span></div>
+        <div class="forge-spec-label">
+          <span class="en">INPUT VOLTAGE</span>
+          <span class="cn">宽电压输入</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 07</div>
+        <div class="forge-spec-num">CAN<span class="unit">2.0B</span></div>
+        <div class="forge-spec-label">
+          <span class="en">PROTOCOL</span>
+          <span class="cn">CAN / RS485 / USB-C</span>
+        </div>
+      </div>
+      <div class="forge-spec">
+        <div class="forge-spec-id">P · 08</div>
+        <div class="forge-spec-num accent">SIL 2</div>
+        <div class="forge-spec-label">
+          <span class="en">FUNCTIONAL SAFETY</span>
+          <span class="cn">功能安全等级（可选）</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison strip -->
+  <div class="forge-comparison">
+    <div class="forge-comparison-heading">
+      <span class="small">Why K1 — In Numbers</span>
+      Outperforms standard hydraulic joysticks across every axis tested.
+    </div>
+    <div class="forge-comparison-stat">
+      <div class="num">3.2×</div>
+      <div class="label">LIFETIME vs INDUSTRY AVG</div>
+    </div>
+    <div class="forge-comparison-stat">
+      <div class="num">0.8<span style="font-size:32px">ms</span></div>
+      <div class="label">RESPONSE LATENCY</div>
+    </div>
+  </div>
+
+  <!-- Anatomy -->
+  <section class="forge-section" id="f-anatomy">
+    <div class="forge-section-header">
+      <div>
+        <div class="forge-section-tag"><span class="num">03</span> — ANATOMY</div>
+        <h2>EVERY<br><span class="stroke">COMPONENT</span><br>EARNS ITS PLACE.</h2>
+      </div>
+      <p class="forge-section-desc">
+        K1 的每一个零件都是从工程现场反推出来的。摇杆、按键、外壳、电缆、连接器——单独都能撑住一台机器跑十年。<br>
+        Designed in collaboration with crane and excavator OEMs across 12 markets.
+      </p>
+    </div>
+
+    <div class="forge-anatomy">
+      <div class="forge-anatomy-visual">
+        <svg viewBox="0 0 480 360" style="width:80%;position:relative;z-index:2"><use href="#joystick-blueprint"/></svg>
+      </div>
+      <div class="forge-anatomy-list">
+        <div class="forge-anatomy-row">
+          <div class="num">01</div>
+          <div class="text">
+            <div class="en">Hall-Effect Stick / 霍尔摇杆</div>
+            <div class="cn">无接触磁感应，零磨损，5M 周期内零漂移</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="forge-anatomy-row">
+          <div class="num">02</div>
+          <div class="text">
+            <div class="en">Forged Chassis / 锻造铝合金外壳</div>
+            <div class="cn">6061-T6 整块 CNC，哑光阳极氧化，抗液压油 / 盐雾</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="forge-anatomy-row">
+          <div class="num">03</div>
+          <div class="text">
+            <div class="en">Multi-Bus Interface / 多协议总线</div>
+            <div class="cn">CAN 2.0B / J1939 / CANopen / Modbus RTU 原生支持</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="forge-anatomy-row">
+          <div class="num">04</div>
+          <div class="text">
+            <div class="en">Modular Buttons / 模块化按键阵列</div>
+            <div class="cn">最多 16 颗可编程按键 + 4 个摇杆开关 + 2 个 dead-man</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="forge-anatomy-row">
+          <div class="num">05</div>
+          <div class="text">
+            <div class="en">EMC / Safety Cert / 电磁兼容与安全</div>
+            <div class="cn">EN 13309 / EN 12895 / IEC 61000-6-2 全合规</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scenarios -->
+  <section class="forge-section">
+    <div class="forge-section-header">
+      <div>
+        <div class="forge-section-tag"><span class="num">04</span> — DEPLOYED</div>
+        <h2>WHERE K1<br><span class="stroke">RUNS DAILY.</span></h2>
+      </div>
+      <p class="forge-section-desc">
+        从矿山到港口，从无人挖机到果园采摘机器人。<br>
+        K1 已部署在超过 12 个国家的 1,200+ 单位重型设备上。
+      </p>
+    </div>
+
+    <div class="forge-scenarios">
+      <div class="forge-scenario">
+        <div class="forge-scenario-info">
+          <div>
+            <div class="forge-scenario-id">SECTOR / 01</div>
+            <div class="forge-scenario-name-en">CRANES &<br>HOISTS</div>
+            <div class="forge-scenario-name-cn">起重 / 吊装设备</div>
+            <div class="forge-scenario-desc">塔吊、汽车吊、港口龙门吊。负载下平稳、可预期的比例控制。</div>
+          </div>
+          <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--f-accent);letter-spacing:0.18em">→ 1,200+ UNITS DEPLOYED</div>
+        </div>
+        <div class="forge-scenario-icon"><svg width="80" height="80" style="color:#FF5C00"><use href="#ico-crane"/></svg></div>
+      </div>
+
+      <div class="forge-scenario">
+        <div class="forge-scenario-info">
+          <div>
+            <div class="forge-scenario-id">SECTOR / 02</div>
+            <div class="forge-scenario-name-en">EARTH-<br>MOVING</div>
+            <div class="forge-scenario-name-cn">挖机 / 工程机械</div>
+            <div class="forge-scenario-desc">挖掘机、装载机、伸缩臂叉装。液压级反馈下的精细操控。</div>
+          </div>
+          <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--f-accent);letter-spacing:0.18em">→ COMPATIBLE W/ ALL OEM ECU</div>
+        </div>
+        <div class="forge-scenario-icon"><svg width="80" height="80" style="color:#FF5C00"><use href="#ico-excavator"/></svg></div>
+      </div>
+
+      <div class="forge-scenario">
+        <div class="forge-scenario-info">
+          <div>
+            <div class="forge-scenario-id">SECTOR / 03</div>
+            <div class="forge-scenario-name-en">PORT &<br>HARBOR</div>
+            <div class="forge-scenario-name-cn">港口 / 物流装备</div>
+            <div class="forge-scenario-desc">岸桥、堆场吊、AGV 控制。盐雾、海风、24/7 工作环境验证。</div>
+          </div>
+          <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--f-accent);letter-spacing:0.18em">→ SALT-SPRAY 240H VERIFIED</div>
+        </div>
+        <div class="forge-scenario-icon"><svg width="80" height="80" style="color:#FF5C00"><use href="#ico-port"/></svg></div>
+      </div>
+
+      <div class="forge-scenario">
+        <div class="forge-scenario-info">
+          <div>
+            <div class="forge-scenario-id">SECTOR / 04</div>
+            <div class="forge-scenario-name-en">AGRI &<br>FORESTRY</div>
+            <div class="forge-scenario-name-cn">农机 / 林业设备</div>
+            <div class="forge-scenario-desc">收割机、果园采摘机、林业拖拉机。粉尘、雨水、机械振动全覆盖。</div>
+          </div>
+          <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--f-accent);letter-spacing:0.18em">→ MIL-STD-810G VIBRATION</div>
+        </div>
+        <div class="forge-scenario-icon"><svg width="80" height="80" style="color:#FF5C00"><use href="#ico-agri"/></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="forge-cta" id="f-deploy">
+    <div class="forge-cta-pre">REQUEST · ENGAGEMENT</div>
+    <h2>EQUIP YOUR<br>FLEET WITH <em>K1</em>.</h2>
+    <div class="forge-cta-row">
+      <a href="mailto:sales@axis.example" class="forge-btn-primary">[GET QUOTE] →</a>
+      <a href="#" class="forge-btn-secondary">DOWNLOAD STEP / CAD</a>
+      <a href="#" class="forge-btn-secondary">BOOK A DEMO CALL</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="forge-footer">
+    <div class="forge-footer-top">
+      <div>
+        <div class="forge-footer-brand">AXIS // CONTROL SYSTEMS</div>
+        <div class="forge-footer-tagline">Heavy-duty industrial control hardware. Designed in Shenzhen, deployed worldwide.</div>
+      </div>
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#">K1 Series</a></li>
+          <li><a href="#">K-Mini</a></li>
+          <li><a href="#">Custom OEM</a></li>
+          <li><a href="#">Accessories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Datasheets</a></li>
+          <li><a href="#">CAD Files</a></li>
+          <li><a href="#">Compliance</a></li>
+          <li><a href="#">Firmware</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:sales@axis.example">sales@axis.example</a></li>
+          <li><a href="#">Distributors</a></li>
+          <li><a href="#">+86 755 0000 0000</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="forge-footer-bottom">
+      <span>© 2025 AXIS · ALL RIGHTS RESERVED</span>
+      <span>SHENZHEN — STUTTGART — DETROIT</span>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ============ SWITCHER SCRIPT ============ -->
+<script>
+(function() {
+  const buttons = document.querySelectorAll('.switcher button');
+  const versions = document.querySelectorAll('.version');
+
+  function activate(name) {
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.version === name));
+    versions.forEach(v => v.classList.toggle('active', v.dataset.version === name));
+    try { localStorage.setItem('axis-variant', name); } catch(e) {}
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.version)));
+
+  try {
+    const saved = localStorage.getItem('axis-variant');
+    if (saved && (saved === 'apex' || saved === 'forge')) activate(saved);
+  } catch(e) {}
+})();
+</script>
+
+</body>
+</html>

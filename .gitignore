@@ -1,0 +1,6 @@
+.env
+node_moudles/
+.claude/
+.claudian/
+.obsidian/
+ddns-go/
