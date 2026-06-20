@@ -1,0 +1,351 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 20rpx;
+  padding-bottom: 100rpx;
+}
+
+/* 书籍头部 */
+.book-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.book-chapters {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.book-actions {
+  margin-left: 20rpx;
+}
+
+.book-actions {
+  display: flex;
+  gap: 12rpx;
+  margin-left: 20rpx;
+}
+
+.action-btn {
+  background: #f0f0f0;
+  color: #666;
+  font-size: 26rpx;
+  padding: 14rpx 24rpx;
+  border-radius: 30rpx;
+}
+
+.action-btn.primary {
+  background: #4A90D9;
+  color: #fff;
+}
+
+/* 无书籍 */
+.empty-book {
+  text-align: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  display: block;
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.empty-hint {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}
+
+.empty-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  align-items: center;
+}
+
+.primary-btn {
+  background: #4A90D9;
+  color: #fff;
+  font-size: 30rpx;
+  padding: 20rpx 80rpx;
+  border-radius: 40rpx;
+  width: 400rpx;
+}
+
+.secondary-btn {
+  background: #fff;
+  color: #4A90D9;
+  font-size: 28rpx;
+  padding: 18rpx 60rpx;
+  border-radius: 40rpx;
+  border: 1rpx solid #4A90D9;
+  width: 400rpx;
+}
+
+/* 章节列表 */
+.chapter-list {
+  margin-top: 20rpx;
+}
+
+.chapter-item {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+}
+
+.chapter-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.chapter-index {
+  font-size: 24rpx;
+  color: #4A90D9;
+  background: rgba(74, 144, 217, 0.1);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  margin-right: 16rpx;
+}
+
+.chapter-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.chapter-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 12rpx;
+}
+
+.chapter-meta {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
+.chapter-loading {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+}
+
+.chapter-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.small-btn {
+  font-size: 24rpx;
+  padding: 10rpx 24rpx;
+  background: #f0f0f0;
+  color: #666;
+  border-radius: 20rpx;
+}
+
+.small-btn.danger {
+  background: #fff;
+  color: #e74c3c;
+  border: 1rpx solid #e74c3c;
+}
+
+/* 危险操作 */
+.danger-section {
+  margin-top: 40rpx;
+  text-align: center;
+}
+
+.danger-btn {
+  background: #fff;
+  color: #e74c3c;
+  font-size: 28rpx;
+  padding: 20rpx 60rpx;
+  border: 1rpx solid #e74c3c;
+  border-radius: 40rpx;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 20rpx 0 40rpx;
+}
+
+.load-more-btn {
+  background: #f0f0f0;
+  color: #666;
+  font-size: 28rpx;
+  padding: 20rpx 40rpx;
+  border-radius: 30rpx;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 600rpx;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 36rpx;
+  color: #999;
+}
+
+.modal-body {
+  flex: 1;
+  padding: 30rpx;
+  overflow-y: auto;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 20rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 300rpx;
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.btn-cancel,
+.btn-confirm {
+  flex: 1;
+  padding: 30rpx;
+  font-size: 32rpx;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.btn-cancel {
+  color: #666;
+  border-right: 1rpx solid #f0f0f0;
+}
+
+.btn-confirm {
+  color: #4A90D9;
+  font-weight: bold;
+}
+
+/* 加载中 */
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 60rpx;
+  color: #999;
+}
+
+/* 卡片样式 */
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+}
+
+/* 导入弹窗 */
+.import-modal .modal-body {
+  padding: 20rpx 30rpx;
+}
+
+.import-tips {
+  background: #f9f9f9;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.tips-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.tips-item {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+}

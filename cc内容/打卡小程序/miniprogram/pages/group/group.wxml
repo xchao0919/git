@@ -1,0 +1,64 @@
+<view class="container">
+  <!-- 标签切换 -->
+  <view class="tabs">
+    <view
+      class="tab-item {{activeTab === 'joined' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="joined"
+    >
+      我加入的
+    </view>
+    <view
+      class="tab-item {{activeTab === 'owned' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="owned"
+    >
+      我创建的
+    </view>
+  </view>
+
+  <!-- 群组列表 -->
+  <view class="group-list" wx:if="{{groups.length > 0}}">
+    <view
+      class="group-card card"
+      wx:for="{{groups}}"
+      wx:key="_id"
+      bindtap="goToGroupDetail"
+      data-id="{{item._id}}"
+    >
+      <image
+        class="group-cover"
+        src="{{item.coverUrl || '/images/default-cover.png'}}"
+        mode="aspectFill"
+      ></image>
+      <view class="group-info">
+        <text class="group-name">{{item.name}}</text>
+        <text class="group-desc">{{item.description || '暂无描述'}}</text>
+        <view class="group-meta">
+          <text class="member-count">{{item.memberCount || 0}}人</text>
+          <text class="create-time">{{item.createTime}}</text>
+        </view>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:elif="{{!loading}}">
+    <image class="empty-icon" src="/images/empty-group.png" mode="aspectFit"></image>
+    <text class="empty-text">
+      {{activeTab === 'joined' ? '还没有加入任何群组' : '还没有创建群组'}}
+    </text>
+    <button class="btn-primary mt-30" bindtap="goToCreate">创建群组</button>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 创建按钮 -->
+  <view class="create-fab" bindtap="goToCreate">
+    <text>+</text>
+  </view>
+</view>

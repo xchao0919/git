@@ -1,0 +1,221 @@
+<view class="container">
+  <!-- 群组信息 -->
+  <view class="group-card card" wx:if="{{groupInfo}}" bindtap="showGroupSelector">
+    <view class="group-header">
+      <image class="group-cover" src="{{groupInfo.coverUrl || '/images/default-cover.png'}}" mode="aspectFill"></image>
+      <view class="group-info">
+        <text class="group-name">{{groupInfo.name}}</text>
+        <text class="group-date">{{todayDate}}</text>
+      </view>
+      <text class="switch-hint">切换 ▼</text>
+    </view>
+  </view>
+
+  <!-- 选择群组提示 -->
+  <view class="select-group-card card" wx:if="{{!loading && !groupInfo && myGroups.length > 0}}" bindtap="showGroupSelector">
+    <text class="select-hint">请选择要打卡的群组</text>
+    <text class="select-arrow">▼</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-card card" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 打卡状态 -->
+  <view class="status-card card" wx:if="{{!loading && groupInfo}}">
+    <view class="status-content" wx:if="{{todayChecked}}">
+      <text class="status-icon checked">✓</text>
+      <text class="status-text">今日已打卡</text>
+    </view>
+    <view class="status-content" wx:else>
+      <text class="status-icon unchecked">○</text>
+      <text class="status-text">今日未打卡</text>
+    </view>
+  </view>
+
+  <!-- 共读书籍 -->
+  <view class="book-section card" wx:if="{{!loading && bookInfo && !todayChecked}}">
+    <view class="book-header">
+      <text class="book-title">📚 {{bookInfo.title}}</text>
+      <view class="chapter-nav">
+        <button class="nav-btn" bindtap="prevChapter" disabled="{{currentChapter === 0}}">上一章</button>
+        <text class="chapter-index">第 {{currentChapter + 1}}/{{bookInfo.chapterCount}} 章</text>
+        <button class="nav-btn" bindtap="nextChapter" disabled="{{currentChapter >= bookInfo.chapterCount - 1}}">下一章</button>
+      </view>
+    </view>
+    <view class="chapter-title" wx:if="{{currentChapterContent}}">{{currentChapterContent.title}}</view>
+    <scroll-view class="chapter-content" scroll-y="true" wx:if="{{currentChapterContent}}">
+      <text>{{currentChapterContent.content}}</text>
+    </scroll-view>
+  </view>
+
+  <!-- 打卡表单 -->
+  <view class="form-card card" wx:if="{{!loading && groupInfo && !todayChecked}}">
+    <!-- 打卡类型选择 -->
+    <view class="checkin-type" wx:if="{{bookInfo}}">
+      <view class="type-tabs">
+        <view class="type-tab {{checkinType === 'normal' ? 'active' : ''}}" bindtap="switchCheckinType" data-type="normal">
+          普通打卡
+        </view>
+        <view class="type-tab {{checkinType === 'reading' ? 'active' : ''}}" bindtap="switchCheckinType" data-type="reading">
+          阅读打卡
+        </view>
+      </view>
+    </view>
+
+    <!-- 阅读打卡表单 -->
+    <block wx:if="{{checkinType === 'reading' && bookInfo}}">
+      <view class="form-item">
+        <view class="form-label">
+          <text>阅读录音</text>
+          <text class="required">*</text>
+        </view>
+        <view class="reading-record">
+          <view class="record-info" wx:if="{{formData.readingAudio}}">
+            <text class="record-duration">已录制 {{readingDuration}} 秒</text>
+            <button class="play-btn" bindtap="playReadingAudio">试听</button>
+          </view>
+          <view class="record-actions">
+            <button class="record-btn {{readingRecording ? 'recording' : ''}}" bindtap="toggleReadingRecord">
+              <text class="record-icon">{{readingRecording ? '●' : '🎤'}}</text>
+              <text>{{readingRecording ? '停止录音' : '开始录音'}}</text>
+            </button>
+            <button class="delete-btn-small" wx:if="{{formData.readingAudio}}" bindtap="deleteReadingAudio">删除</button>
+          </view>
+        </view>
+      </view>
+      <view class="form-item">
+        <view class="form-label"><text>阅读心得（选填）</text></view>
+        <textarea
+          class="form-textarea"
+          placeholder="分享你的阅读感悟..."
+          value="{{formData.text}}"
+          bindinput="handleTextInput"
+          maxlength="500"
+        ></textarea>
+        <text class="word-count">{{formData.text.length}}/500</text>
+      </view>
+    </block>
+
+    <!-- 普通打卡表单 -->
+    <block wx:else>
+      <!-- 文字打卡 -->
+      <view class="form-item">
+        <view class="form-label">
+          <text>打卡心得</text>
+          <text class="required" wx:if="{{groupInfo.checkInConfig.requiredTypes.includes('text')}}">*</text>
+        </view>
+        <textarea
+          class="form-textarea"
+          placeholder="写下你的打卡心得..."
+          value="{{formData.text}}"
+          bindinput="handleTextInput"
+          maxlength="500"
+        ></textarea>
+        <text class="word-count">{{formData.text.length}}/500</text>
+      </view>
+
+      <!-- 图片打卡 -->
+      <view class="form-item">
+        <view class="form-label">
+          <text>图片</text>
+          <text class="required" wx:if="{{groupInfo.checkInConfig.requireImage}}">*</text>
+        </view>
+        <view class="image-list">
+          <view class="image-item" wx:for="{{formData.images}}" wx:key="*this">
+            <image src="{{item}}" mode="aspectFill" bindtap="handlePreviewImage" data-url="{{item}}"></image>
+            <view class="delete-btn" catchtap="handleDeleteImage" data-index="{{index}}">×</view>
+          </view>
+          <view class="image-add" bindtap="handleChooseImage" wx:if="{{formData.images.length < 9}}">
+            <text class="add-icon">+</text>
+            <text class="add-text">添加图片</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 视频打卡 -->
+      <view class="form-item">
+        <view class="form-label">
+          <text>视频</text>
+          <text class="required" wx:if="{{groupInfo.checkInConfig.requireVideo}}">*</text>
+        </view>
+        <view class="video-section" wx:if="{{formData.video}}">
+          <video class="video-preview" src="{{formData.video}}" controls></video>
+          <view class="delete-btn" catchtap="handleDeleteVideo">×</view>
+        </view>
+        <view class="add-btn" bindtap="handleChooseVideo" wx:else>
+          <text class="add-icon">+</text>
+          <text>添加视频</text>
+        </view>
+      </view>
+
+      <!-- 语音打卡 -->
+      <view class="form-item">
+        <view class="form-label">
+          <text>语音</text>
+          <text class="required" wx:if="{{groupInfo.checkInConfig.requireAudio}}">*</text>
+        </view>
+        <view class="audio-section" wx:if="{{formData.audio}}">
+          <audio src="{{formData.audio}}" controls></audio>
+          <view class="delete-btn" catchtap="handleDeleteAudio">×</view>
+        </view>
+        <view class="add-btn" bindtap="handleRecordAudio" wx:else>
+          <text class="add-icon">{{recording ? '●' : '♪'}}</text>
+          <text>{{recording ? '点击停止' : '录制语音'}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section" wx:if="{{!loading && groupInfo && !todayChecked}}">
+    <button
+      class="submit-btn {{canSubmit ? '' : 'disabled'}}"
+      bindtap="handleSubmit"
+      disabled="{{!canSubmit || uploading}}"
+    >
+      {{uploading ? '提交中...' : '提交打卡'}}
+    </button>
+  </view>
+
+  <!-- 打卡要求提示 -->
+  <view class="tips-card card" wx:if="{{groupInfo && groupInfo.checkInConfig && checkinType === 'normal'}}">
+    <text class="tips-title">打卡要求</text>
+    <view class="tips-list">
+      <text class="tips-item" wx:if="{{groupInfo.checkInConfig.minWords}}">• 文字至少 {{groupInfo.checkInConfig.minWords}} 字</text>
+      <text class="tips-item" wx:if="{{groupInfo.checkInConfig.requireImage}}">• 必须上传图片</text>
+      <text class="tips-item" wx:if="{{groupInfo.checkInConfig.requireVideo}}">• 必须上传视频</text>
+      <text class="tips-item" wx:if="{{groupInfo.checkInConfig.requireAudio}}">• 必须上传语音</text>
+    </view>
+  </view>
+</view>
+
+<!-- 群组选择器 -->
+<view class="picker-mask" wx:if="{{showGroupPicker}}" bindtap="hideGroupPicker">
+  <view class="picker-content" catchtap="">
+    <view class="picker-header">
+      <text class="picker-title">选择打卡群组</text>
+      <text class="picker-close" bindtap="hideGroupPicker">✕</text>
+    </view>
+    <view class="picker-list">
+      <view
+        class="picker-item {{item._id === groupId ? 'active' : ''}}"
+        wx:for="{{myGroups}}"
+        wx:key="_id"
+        bindtap="selectGroup"
+        data-id="{{item._id}}"
+      >
+        <image class="picker-cover" src="{{item.coverUrl || '/images/default-cover.png'}}" mode="aspectFill"></image>
+        <view class="picker-info">
+          <text class="picker-name">{{item.name}}</text>
+          <text class="picker-count">{{item.memberCount || 0}}人</text>
+        </view>
+        <text class="picker-check" wx:if="{{item._id === groupId}}">✓</text>
+      </view>
+    </view>
+    <view class="picker-empty" wx:if="{{myGroups.length === 0}}">
+      <text>暂无群组，请先加入群组</text>
+    </view>
+  </view>
+</view>

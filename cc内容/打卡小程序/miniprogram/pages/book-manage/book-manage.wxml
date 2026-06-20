@@ -1,0 +1,113 @@
+<view class="container">
+  <!-- 书籍信息 -->
+  <view class="book-header card" wx:if="{{bookInfo}}">
+    <view class="book-info" bindtap="editBookTitle">
+      <text class="book-title">{{bookInfo.title || '共读书籍'}}</text>
+      <text class="book-chapters">共 {{chapters.length}} 个章节</text>
+    </view>
+    <view class="book-actions">
+      <button class="action-btn" bindtap="showImportModal">导入文件</button>
+      <button class="action-btn primary" bindtap="showAddChapterModal">添加章节</button>
+    </view>
+  </view>
+
+  <!-- 无书籍时 -->
+  <view class="empty-book card" wx:else>
+    <text class="empty-icon">📚</text>
+    <text class="empty-text">暂无共读书籍</text>
+    <text class="empty-hint">支持导入 TXT、MD 格式的文件</text>
+    <view class="empty-actions">
+      <button class="primary-btn" bindtap="showImportModal">导入文件</button>
+      <button class="secondary-btn" bindtap="showAddChapterModal">手动添加</button>
+    </view>
+  </view>
+
+  <!-- 章节列表 -->
+  <view class="chapter-list" wx:if="{{displayChapters.length > 0}}">
+    <view class="chapter-item card" wx:for="{{displayChapters}}" wx:key="originalIndex">
+      <view class="chapter-header">
+        <text class="chapter-index">第 {{item.originalIndex + 1}} 章</text>
+        <text class="chapter-title">{{item.title}}</text>
+      </view>
+      <view class="chapter-content" wx:if="{{item.content}}">{{item.content.length > 100 ? item.content.substring(0, 100) + '...' : item.content}}</view>
+      <view class="chapter-loading" wx:elif="{{!item.content}}">加载中...</view>
+      <view class="chapter-meta" wx:if="{{item.content}}">共 {{item.content.length}} 字</view>
+      <view class="chapter-actions">
+        <button class="small-btn" bindtap="editChapter" data-index="{{item.originalIndex}}">编辑</button>
+        <button class="small-btn danger" bindtap="deleteChapter" data-index="{{item.originalIndex}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore}}">
+    <button class="load-more-btn" bindtap="loadMoreChapters">加载更多 ({{displayChapters.length}}/{{bookInfo.chapterCount}})</button>
+  </view>
+
+  <!-- 删除书籍 -->
+  <view class="danger-section" wx:if="{{bookInfo}}">
+    <button class="danger-btn" bindtap="deleteBook">删除书籍</button>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 导入文件弹窗 -->
+<view class="modal-mask" wx:if="{{showImportModal}}" bindtap="hideImportModal" catchtouchmove="true">
+  <view class="modal-content import-modal" catchtap="">
+    <view class="modal-header">
+      <text class="modal-title">导入书籍</text>
+      <text class="modal-close" bindtap="hideImportModal">✕</text>
+    </view>
+    <view class="modal-body">
+      <view class="import-tips">
+        <text class="tips-title">支持的格式</text>
+        <text class="tips-item">• TXT 文本文件</text>
+        <text class="tips-item">• MD Markdown 文件</text>
+      </view>
+      <view class="import-tips">
+        <text class="tips-title">章节识别规则</text>
+        <text class="tips-item">• 第X章/第X节/第X回...</text>
+        <text class="tips-item">• Chapter X / CHAPTER X</text>
+        <text class="tips-item">• Markdown 标题 (#开头)</text>
+        <text class="tips-item">• 按空行或固定字数分割</text>
+      </view>
+      <view class="import-tips">
+        <text class="tips-title">导入方式</text>
+        <text class="tips-item">• 从微信聊天记录选择文件</text>
+        <text class="tips-item">• 文件名会作为书名</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="hideImportModal">取消</button>
+      <button class="btn-confirm" bindtap="importFromFile">选择文件</button>
+    </view>
+  </view>
+</view>
+
+<!-- 添加/编辑章节弹窗 -->
+<view class="modal-mask" wx:if="{{showChapterModal}}" bindtap="closeChapterModal" catchtouchmove="true">
+  <view class="modal-content" catchtap="">
+    <view class="modal-header">
+      <text class="modal-title">{{editingChapter !== null ? '编辑章节' : '添加章节'}}</text>
+      <text class="modal-close" bindtap="closeChapterModal">✕</text>
+    </view>
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">章节标题</text>
+        <input class="form-input" placeholder="请输入章节标题" value="{{chapterForm.title}}" bindinput="handleTitleInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">章节内容</text>
+        <textarea class="form-textarea" placeholder="请输入章节内容" value="{{chapterForm.content}}" bindinput="handleContentInput" maxlength="5000" />
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeChapterModal">取消</button>
+      <button class="btn-confirm" bindtap="saveChapter">保存</button>
+    </view>
+  </view>
+</view>

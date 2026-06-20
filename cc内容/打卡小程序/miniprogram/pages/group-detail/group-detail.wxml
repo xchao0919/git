@@ -1,0 +1,92 @@
+<view class="container">
+  <!-- 群组头部 -->
+  <view class="group-header" wx:if="{{groupInfo}}">
+    <image class="group-cover" src="{{groupInfo.coverUrl || '/images/default-cover.png'}}" mode="aspectFill"></image>
+    <view class="group-info">
+      <text class="group-name">{{groupInfo.name}}</text>
+      <text class="group-desc">{{groupInfo.description || '暂无描述'}}</text>
+      <view class="group-meta">
+        <text>{{groupInfo.memberCount || 0}}人</text>
+        <text wx:if="{{isOwner}}" class="role-tag owner">群主</text>
+        <text wx:elif="{{isAdmin}}" class="role-tag admin">管理员</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <view class="action-btn primary" bindtap="goToCheckIn">
+      <text class="action-icon">✓</text>
+      <text>打卡</text>
+    </view>
+    <view class="action-btn" bindtap="goToStatistics">
+      <text class="action-icon">📊</text>
+      <text>统计</text>
+    </view>
+    <view class="action-btn" bindtap="handleInvite">
+      <text class="action-icon">+</text>
+      <text>邀请</text>
+    </view>
+    <view class="action-btn" bindtap="goToAdmin">
+      <text class="action-icon">👥</text>
+      <text>管理</text>
+    </view>
+  </view>
+
+  <!-- 今日打卡 -->
+  <view class="section card">
+    <view class="section-header">
+      <text class="section-title">今日打卡</text>
+      <text class="section-count">{{todayCheckIns.length}}人</text>
+    </view>
+    <view class="checkin-list" wx:if="{{todayCheckIns.length > 0}}">
+      <view class="checkin-item" wx:for="{{todayCheckIns}}" wx:key="_id">
+        <image class="avatar" src="{{item.userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="checkin-info">
+          <text class="nickname">{{item.userInfo.nickName || '未知用户'}}</text>
+          <text class="content">{{item.content.text || '图片/视频打卡'}}</text>
+        </view>
+        <text class="time">{{item.createTime}}</text>
+      </view>
+    </view>
+    <view class="empty" wx:else>
+      <text class="empty-text">今日暂无打卡</text>
+    </view>
+  </view>
+
+  <!-- 打卡规则 -->
+  <view class="section card" wx:if="{{groupInfo && groupInfo.checkInConfig}}">
+    <view class="section-title">打卡规则</view>
+    <view class="rule-list">
+      <text class="rule-item" wx:if="{{groupInfo.checkInConfig.minWords}}">
+        • 文字至少 {{groupInfo.checkInConfig.minWords}} 字
+      </text>
+      <text class="rule-item" wx:if="{{groupInfo.checkInConfig.requireImage}}">
+        • 必须上传图片
+      </text>
+      <text class="rule-item" wx:if="{{groupInfo.checkInConfig.requireVideo}}">
+        • 必须上传视频
+      </text>
+      <text class="rule-item" wx:if="{{groupInfo.checkInConfig.requireAudio}}">
+        • 必须上传语音
+      </text>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="bottom-actions">
+    <!-- 非群主：退出群组 -->
+    <button class="action-button quit" wx:if="{{!isOwner}}" bindtap="handleQuit">
+      退出群组
+    </button>
+    <!-- 群主：解散群组 -->
+    <button class="action-button dissolve" wx:else bindtap="handleDissolve">
+      解散群组
+    </button>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

@@ -1,0 +1,70 @@
+<view class="container">
+  <!-- 未登录状态 -->
+  <view class="login-section" wx:if="{{!isLoggedIn}}">
+    <view class="login-card">
+      <image class="login-logo" src="/images/logo.png" mode="aspectFit"></image>
+      <text class="login-title">打卡小程序</text>
+      <text class="login-desc">坚持打卡，见证成长</text>
+      <button class="btn-primary login-btn" bindgetuserinfo="handleGetUserInfo" open-type="getUserInfo">
+        微信授权登录
+      </button>
+    </view>
+  </view>
+
+  <!-- 已登录状态 -->
+  <view class="main-content" wx:else>
+    <!-- 用户信息卡片 -->
+    <view class="user-card card">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="tip">今天也要坚持打卡哦~</text>
+      </view>
+    </view>
+
+    <!-- 我的群组 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">我的群组</text>
+        <view class="section-action" bindtap="goToCreateGroup">
+          <text>创建群组</text>
+          <text class="iconfont icon-add"></text>
+        </view>
+      </view>
+      <view class="group-list" wx:if="{{myGroups.length > 0}}">
+        <view class="group-item card" wx:for="{{myGroups}}" wx:key="_id" bindtap="goToGroup" data-id="{{item._id}}">
+          <image class="group-cover" src="{{item.coverUrl || '/images/default-cover.png'}}" mode="aspectFill"></image>
+          <view class="group-info">
+            <text class="group-name">{{item.name}}</text>
+            <text class="group-members">{{item.memberCount || 0}}人</text>
+          </view>
+          <text class="iconfont icon-arrow-right"></text>
+        </view>
+      </view>
+      <view class="empty" wx:else>
+        <text class="empty-text">暂无群组，快去创建一个吧~</text>
+        <button class="btn-outline mt-30" bindtap="goToCreateGroup">创建群组</button>
+      </view>
+    </view>
+
+    <!-- 最近打卡 -->
+    <view class="section" wx:if="{{recentCheckIns.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">最近打卡</text>
+      </view>
+      <view class="checkin-list">
+        <view class="checkin-item card" wx:for="{{recentCheckIns}}" wx:key="_id">
+          <view class="checkin-header">
+            <text class="checkin-date">{{item.date}}</text>
+          </view>
+          <text class="checkin-content">{{item.content.text || '图片/视频打卡'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

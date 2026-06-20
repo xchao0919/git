@@ -25,12 +25,11 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 100001,
-			"version": 2,
-			"versionNonce": 697514119,
+			"version": 3,
+			"versionNonce": 1951344039,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
-			"link": null,
 			"locked": false,
 			"containerId": null,
 			"lineHeight": 1.25,
@@ -38,9 +37,10 @@
 			"index": "a0",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337613,
+			"updated": 1781706375092,
 			"hasTextLink": false,
-			"rawText": ""
+			"rawText": "Claude Code Skills 使用指南",
+			"link": null
 		},
 		{
 			"type": "text",
@@ -299,8 +299,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 200009,
-			"version": 3,
-			"versionNonce": 1893705,
+			"version": 5,
+			"versionNonce": 587039303,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -312,7 +312,7 @@
 			"index": "a7",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337838,
+			"updated": 1781706342036,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -529,12 +529,11 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 300005,
-			"version": 3,
-			"versionNonce": 1115219721,
+			"version": 4,
+			"versionNonce": 1937621799,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
-			"link": null,
 			"locked": false,
 			"containerId": "trig_user",
 			"lineHeight": 1.25,
@@ -542,9 +541,9 @@
 			"index": "aD",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337839,
+			"updated": 1781708986538,
 			"hasTextLink": false,
-			"rawText": ""
+			"rawText": "用户输入"
 		},
 		{
 			"type": "arrow",
@@ -580,16 +579,16 @@
 				]
 			],
 			"startBinding": {
-				"mode": "orbit",
 				"elementId": "trig_user",
+				"mode": "orbit",
 				"fixedPoint": [
 					0.9999999999981005,
 					0.5001
 				]
 			},
 			"endBinding": {
-				"mode": "orbit",
 				"elementId": "trig_decision",
+				"mode": "orbit",
 				"fixedPoint": [
 					0.0012692307692304893,
 					0.5142857142857142
@@ -713,16 +712,16 @@
 				]
 			],
 			"startBinding": {
-				"mode": "orbit",
 				"elementId": "trig_decision",
+				"mode": "orbit",
 				"fixedPoint": [
 					0.9987307692307695,
 					0.5142857142857142
 				]
 			},
 			"endBinding": {
-				"mode": "orbit",
 				"elementId": "trig_explicit",
+				"mode": "orbit",
 				"fixedPoint": [
 					0.11982329355503929,
 					0.11982329355503993
@@ -770,16 +769,16 @@
 				]
 			],
 			"startBinding": {
-				"mode": "orbit",
 				"elementId": "trig_decision",
+				"mode": "orbit",
 				"fixedPoint": [
 					0.9987307692307695,
 					0.5142857142857142
 				]
 			},
 			"endBinding": {
-				"mode": "orbit",
 				"elementId": "trig_auto",
+				"mode": "orbit",
 				"fixedPoint": [
 					0.26363686856617613,
 					0.7363631314338233
@@ -854,8 +853,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 300019,
-			"version": 3,
-			"versionNonce": 529496265,
+			"version": 5,
+			"versionNonce": 1522064519,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -867,7 +866,7 @@
 			"index": "aK",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337839,
+			"updated": 1781706342038,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -932,8 +931,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 300023,
-			"version": 3,
-			"versionNonce": 2056746921,
+			"version": 5,
+			"versionNonce": 1720886983,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -945,7 +944,7 @@
 			"index": "aM",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337840,
+			"updated": 1781706342038,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -971,12 +970,11 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 300025,
-			"version": 2,
-			"versionNonce": 1774996233,
+			"version": 3,
+			"versionNonce": 872840295,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
-			"link": null,
 			"locked": false,
 			"containerId": null,
 			"lineHeight": 1.25,
@@ -984,9 +982,10 @@
 			"index": "aN",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337613,
+			"updated": 1781706380339,
 			"hasTextLink": false,
-			"rawText": ""
+			"rawText": "自动触发 = frontmatter 中的 description 字段决定",
+			"link": null
 		},
 		{
 			"type": "text",
@@ -1010,12 +1009,11 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 400001,
-			"version": 2,
-			"versionNonce": 540575239,
+			"version": 3,
+			"versionNonce": 2135003911,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
-			"link": null,
 			"locked": false,
 			"containerId": null,
 			"lineHeight": 1.25,
@@ -1023,9 +1021,10 @@
 			"index": "aO",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337613,
+			"updated": 1781706377019,
 			"hasTextLink": false,
-			"rawText": ""
+			"rawText": "Skill 文件结构",
+			"link": null
 		},
 		{
 			"type": "text",
@@ -1708,8 +1707,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 500007,
-			"version": 3,
-			"versionNonce": 1979488905,
+			"version": 5,
+			"versionNonce": 1169088775,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -1721,7 +1720,7 @@
 			"index": "af",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337840,
+			"updated": 1781706342039,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -1786,8 +1785,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 500011,
-			"version": 3,
-			"versionNonce": 1383752041,
+			"version": 5,
+			"versionNonce": 2117176135,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -1799,7 +1798,7 @@
 			"index": "ah",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337840,
+			"updated": 1781706342039,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -1864,8 +1863,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 500015,
-			"version": 3,
-			"versionNonce": 761023561,
+			"version": 5,
+			"versionNonce": 1564386695,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -1877,7 +1876,7 @@
 			"index": "aj",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337840,
+			"updated": 1781706342040,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -1942,8 +1941,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 500019,
-			"version": 3,
-			"versionNonce": 1853741865,
+			"version": 5,
+			"versionNonce": 922365895,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -1955,7 +1954,7 @@
 			"index": "al",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337840,
+			"updated": 1781706342040,
 			"hasTextLink": false,
 			"rawText": ""
 		},
@@ -2251,8 +2250,8 @@
 		{
 			"type": "text",
 			"id": "l494Qsza",
-			"x": 40,
-			"y": 750,
+			"x": 27.15218557383156,
+			"y": 749.1434267603647,
 			"width": 204.015625,
 			"height": 27.5,
 			"text": "SKILL.md 文件示例",
@@ -2270,12 +2269,11 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 600001,
-			"version": 2,
-			"versionNonce": 1926273289,
+			"version": 19,
+			"versionNonce": 906046119,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
-			"link": null,
 			"locked": false,
 			"containerId": null,
 			"lineHeight": 1.25,
@@ -2283,9 +2281,10 @@
 			"index": "at",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337613,
+			"updated": 1781706368539,
 			"hasTextLink": false,
-			"rawText": ""
+			"rawText": "SKILL.md 文件示例",
+			"link": null
 		},
 		{
 			"type": "rectangle",
@@ -2360,8 +2359,8 @@
 		{
 			"type": "text",
 			"id": "tziJoqBg",
-			"x": 255.42864118303584,
-			"y": 1023.0000087193082,
+			"x": 176.62873884148155,
+			"y": 914.2218073693307,
 			"width": 352.875,
 			"height": 30,
 			"text": "↑ name + description 决定 Skill 的标识与自动触发关键词\n  正文是给 Claude 的指令, 可引用 references/ 下的资料",
@@ -2379,8 +2378,8 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 600007,
-			"version": 148,
-			"versionNonce": 1682342407,
+			"version": 351,
+			"versionNonce": 1602804999,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
@@ -2392,15 +2391,15 @@
 			"index": "aw",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695440165,
+			"updated": 1781706361757,
 			"hasTextLink": false,
 			"rawText": ""
 		},
 		{
 			"type": "text",
 			"id": "ez69RXVd",
-			"x": 760,
-			"y": 750,
+			"x": 747.1521855738316,
+			"y": 750.8565732396353,
 			"width": 235.125,
 			"height": 27.5,
 			"text": "本机已装 Skills 一览",
@@ -2418,12 +2417,11 @@
 			"opacity": 100,
 			"angle": 0,
 			"seed": 600009,
-			"version": 2,
-			"versionNonce": 1596107465,
+			"version": 19,
+			"versionNonce": 1105048647,
 			"isDeleted": false,
 			"groupIds": [],
 			"boundElements": [],
-			"link": null,
 			"locked": false,
 			"containerId": null,
 			"lineHeight": 1.25,
@@ -2431,9 +2429,10 @@
 			"index": "ax",
 			"frameId": null,
 			"roundness": null,
-			"updated": 1781695337613,
+			"updated": 1781706372390,
 			"hasTextLink": false,
-			"rawText": ""
+			"rawText": "本机已装 Skills 一览",
+			"link": null
 		},
 		{
 			"type": "line",
@@ -3109,10 +3108,10 @@
 		"currentItemEndArrowhead": "arrow",
 		"currentItemArrowType": "round",
 		"currentItemFrameRole": null,
-		"scrollX": -112.88328442308591,
-		"scrollY": 256.72070413681854,
+		"scrollX": 8.031069925581903,
+		"scrollY": 167.32545895174263,
 		"zoom": {
-			"value": 0.5
+			"value": 0.557273
 		},
 		"currentItemRoundness": "round",
 		"gridSize": 20,

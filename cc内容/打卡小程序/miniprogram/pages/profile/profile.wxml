@@ -1,0 +1,54 @@
+<view class="container">
+  <!-- 未登录状态 -->
+  <view class="login-section" wx:if="{{!isLoggedIn}}">
+    <view class="login-card">
+      <image class="login-avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
+      <text class="login-text">登录后查看更多信息</text>
+      <button class="btn-primary login-btn" bindgetuserinfo="handleGetUserInfo" open-type="getUserInfo">
+        微信授权登录
+      </button>
+    </view>
+  </view>
+
+  <!-- 已登录状态 -->
+  <view class="profile-section" wx:else>
+    <!-- 用户信息 -->
+    <view class="user-card">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <text class="nickname">{{userInfo.nickName}}</text>
+      <text class="user-id">ID: {{userInfo._id}}</text>
+    </view>
+
+    <!-- 统计数据 -->
+    <view class="stats-card">
+      <view class="stat-item" bindtap="goToMyGroups">
+        <text class="stat-num">{{myGroupsCount}}</text>
+        <text class="stat-label">我的群组</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="goToMyCheckIns">
+        <text class="stat-num">{{totalCheckIns}}</text>
+        <text class="stat-label">打卡总数</text>
+      </view>
+    </view>
+
+    <!-- 功能列表 -->
+    <view class="menu-section">
+      <view class="menu-item" bindtap="goToMyGroups">
+        <text class="menu-icon">👥</text>
+        <text class="menu-label">我的群组</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goToMyCheckIns">
+        <text class="menu-icon">📝</text>
+        <text class="menu-label">我的打卡</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goToSetting">
+        <text class="menu-icon">⚙</text>
+        <text class="menu-label">设置</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+</view>

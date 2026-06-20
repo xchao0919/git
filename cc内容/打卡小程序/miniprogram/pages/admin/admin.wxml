@@ -1,0 +1,220 @@
+<view class="container">
+  <!-- 标签切换 -->
+  <view class="tabs">
+    <view
+      class="tab-item {{activeTab === 'members' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="members"
+    >
+      成员管理
+    </view>
+    <view
+      class="tab-item {{activeTab === 'settings' ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="settings"
+    >
+      群组设置
+    </view>
+  </view>
+
+  <!-- 成员管理 -->
+  <view class="member-section" wx:if="{{activeTab === 'members'}}">
+    <!-- 搜索栏 -->
+    <view class="search-bar">
+      <input
+        class="search-input"
+        placeholder="搜索成员"
+        value="{{searchKey}}"
+        bindinput="handleSearch"
+      />
+      <text class="clear-btn" wx:if="{{searchKey}}" bindtap="clearSearch">✕</text>
+    </view>
+
+    <!-- 成员统计 -->
+    <view class="stats-bar">
+      <text class="stats-text">共 {{members.length}} 名成员</text>
+    </view>
+
+    <!-- 成员列表 -->
+    <view class="member-list" wx:if="{{filteredMembers.length > 0}}">
+      <view class="member-item" wx:for="{{filteredMembers}}" wx:key="_id">
+        <image class="avatar" src="{{item.userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="member-info">
+          <text class="nickname">{{item.userInfo.nickName || '未知用户'}}</text>
+          <view class="role-wrapper">
+            <text class="role-tag owner" wx:if="{{item.role === 1}}">群主</text>
+            <text class="role-tag admin" wx:elif="{{item.role === 2}}">管理员</text>
+            <text class="role-tag member" wx:else>成员</text>
+          </view>
+        </view>
+
+        <!-- 管理员操作 -->
+        <view class="member-actions" wx:if="{{isOwner && item.role !== 1}}">
+          <button
+            class="action-btn small"
+            wx:if="{{item.role === 3}}"
+            bindtap="handleSetAdmin"
+            data-user-id="{{item.userId}}"
+          >
+            设为管理员
+          </button>
+          <button
+            class="action-btn small outline"
+            wx:elif="{{item.role === 2}}"
+            bindtap="handleRemoveAdmin"
+            data-user-id="{{item.userId}}"
+          >
+            取消管理员
+          </button>
+          <button
+            class="action-btn small danger"
+            bindtap="handleKick"
+            data-user-id="{{item.userId}}"
+          >
+            踢出
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:elif="{{!loading}}">
+      <text class="empty-text">{{searchKey ? '未找到匹配的成员' : '暂无成员'}}</text>
+    </view>
+  </view>
+
+  <!-- 群组设置 -->
+  <view class="settings-section" wx:if="{{activeTab === 'settings'}}">
+    <!-- 群组信息 -->
+    <view class="setting-group">
+      <view class="group-title">群组信息</view>
+      <view class="setting-item" bindtap="showEditInfoModal">
+        <view class="item-left">
+          <text class="item-label">群组名称</text>
+          <text class="item-value">{{groupInfo.name}}</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+      <view class="setting-item" bindtap="showEditInfoModal">
+        <view class="item-left">
+          <text class="item-label">群组描述</text>
+          <text class="item-value">{{groupInfo.description || '暂无描述'}}</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 打卡规则 -->
+    <view class="setting-group">
+      <view class="group-title">打卡规则</view>
+      <view class="setting-item" bindtap="showEditRuleModal">
+        <view class="item-left">
+          <text class="item-label">最少字数</text>
+          <text class="item-value">{{groupInfo.checkInConfig.minWords || 10}} 字</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+      <view class="setting-item">
+        <text class="item-label">必须上传图片</text>
+        <switch checked="{{groupInfo.checkInConfig.requireImage}}" disabled color="#4A90D9" />
+      </view>
+      <view class="setting-item">
+        <text class="item-label">必须上传视频</text>
+        <switch checked="{{groupInfo.checkInConfig.requireVideo}}" disabled color="#4A90D9" />
+      </view>
+      <view class="setting-item">
+        <text class="item-label">必须上传语音</text>
+        <switch checked="{{groupInfo.checkInConfig.requireAudio}}" disabled color="#4A90D9" />
+      </view>
+      <view class="setting-tip">点击上方项目可修改规则</view>
+    </view>
+
+    <!-- 共读书籍 -->
+    <view class="setting-group">
+      <view class="group-title">共读书籍</view>
+      <view class="setting-item" bindtap="goToBookManage">
+        <view class="item-left">
+          <text class="item-label">书籍管理</text>
+          <text class="item-value">{{groupInfo.book ? groupInfo.book.title : '未设置'}}</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+      <view class="setting-tip" wx:if="{{isOwner}}">管理员可上传书籍供成员阅读打卡</view>
+    </view>
+
+    <!-- 危险操作 -->
+    <view class="setting-group danger-group" wx:if="{{isOwner}}">
+      <view class="group-title">危险操作</view>
+      <view class="setting-item danger-item" bindtap="handleDissolve">
+        <view class="item-left">
+          <text class="item-label">解散群组</text>
+          <text class="item-desc">解散后群组将无法恢复</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 退出群组（非群主显示） -->
+    <view class="setting-group" wx:if="{{!isOwner}}">
+      <view class="group-title">其他操作</view>
+      <view class="setting-item quit-item" bindtap="handleQuit">
+        <text class="item-label">退出群组</text>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 编辑弹窗 -->
+<view class="modal-mask" wx:if="{{showEditModal}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="">
+    <view class="modal-header">
+      <text class="modal-title">{{editMode === 'info' ? '编辑群组信息' : '打卡规则设置'}}</text>
+      <text class="modal-close" bindtap="closeModal">✕</text>
+    </view>
+
+    <view class="modal-body">
+      <!-- 群组信息编辑 -->
+      <block wx:if="{{editMode === 'info'}}">
+        <view class="form-item">
+          <text class="form-label">群组名称</text>
+          <input class="form-input" placeholder="请输入群组名称" value="{{editForm.name}}" bindinput="handleNameInput" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">群组描述</text>
+          <textarea class="form-textarea" placeholder="请输入群组描述（选填）" value="{{editForm.description}}" bindinput="handleDescInput" maxlength="200" />
+        </view>
+      </block>
+
+      <!-- 打卡规则编辑 -->
+      <block wx:if="{{editMode === 'rule'}}">
+        <view class="form-item">
+          <text class="form-label">文字最少字数</text>
+          <input class="form-input" type="number" placeholder="请输入最少字数" value="{{editForm.minWords}}" bindinput="handleMinWordsInput" />
+        </view>
+        <view class="form-item switch-item">
+          <text class="form-label">必须上传图片</text>
+          <switch checked="{{editForm.requireImage}}" bindchange="toggleRequireImage" color="#4A90D9" />
+        </view>
+        <view class="form-item switch-item">
+          <text class="form-label">必须上传视频</text>
+          <switch checked="{{editForm.requireVideo}}" bindchange="toggleRequireVideo" color="#4A90D9" />
+        </view>
+        <view class="form-item switch-item">
+          <text class="form-label">必须上传语音</text>
+          <switch checked="{{editForm.requireAudio}}" bindchange="toggleRequireAudio" color="#4A90D9" />
+        </view>
+      </block>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeModal">取消</button>
+      <button class="btn-confirm" bindtap="handleSaveEdit">保存</button>
+    </view>
+  </view>
+</view>
