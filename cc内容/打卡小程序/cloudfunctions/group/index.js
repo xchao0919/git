@@ -107,6 +107,12 @@ async function handleUpdate(data, openid) {
       return { code: 403, message: '无权限操作' };
     }
 
+    // book 字段必须整体替换，不能用点表示法更新
+    // 否则当数据库里 book 为 null 时会报 -502001: Cannot create field 'chapters' in element {book: null}
+    if ('book' in updateData) {
+      updateData.book = _.set(updateData.book);
+    }
+
     await groupsCollection.doc(groupId).update({
       data: {
         ...updateData,

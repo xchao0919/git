@@ -1,0 +1,9 @@
+{
+  "name": "miniprogram",
+  "version": "1.0.0",
+  "description": "打卡小程序前端",
+  "main": "app.js",
+  "dependencies": {
+    "jszip": "^3.10.1"
+  }
+}

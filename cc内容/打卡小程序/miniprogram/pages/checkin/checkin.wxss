@@ -1,6 +1,6 @@
 .container {
   padding: 20rpx;
-  padding-bottom: 200rpx;
+  padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
 }
 
 /* 群组卡片 */
@@ -226,6 +226,7 @@
   left: 0;
   right: 0;
   padding: 20rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   background: #fff;
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
@@ -404,6 +405,48 @@
 .chapter-index {
   font-size: 22rpx;
   color: #999;
+  padding: 6rpx 12rpx;
+}
+
+.chapter-index.clickable {
+  color: #4A90D9;
+}
+
+.chapter-index-arrow {
+  margin-left: 4rpx;
+  font-size: 20rpx;
+}
+
+/* 章节选择器 */
+.chapter-picker-list {
+  max-height: 70vh;
+}
+
+.chapter-picker-list .picker-item {
+  align-items: center;
+  gap: 16rpx;
+}
+
+.chapter-picker-num {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: #999;
+  min-width: 110rpx;
+}
+
+.chapter-picker-title {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chapter-picker-list .picker-item.active .chapter-picker-num,
+.chapter-picker-list .picker-item.active .chapter-picker-title {
+  color: #4A90D9;
+  font-weight: bold;
 }
 
 .chapter-title {

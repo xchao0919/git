@@ -15,7 +15,7 @@
   <view class="empty-book card" wx:else>
     <text class="empty-icon">📚</text>
     <text class="empty-text">暂无共读书籍</text>
-    <text class="empty-hint">支持导入 TXT、MD 格式的文件</text>
+    <text class="empty-hint">支持导入 TXT、MD、EPUB 格式的文件</text>
     <view class="empty-actions">
       <button class="primary-btn" bindtap="showImportModal">导入文件</button>
       <button class="secondary-btn" bindtap="showAddChapterModal">手动添加</button>
@@ -65,8 +65,9 @@
     <view class="modal-body">
       <view class="import-tips">
         <text class="tips-title">支持的格式</text>
-        <text class="tips-item">• TXT 文本文件</text>
+        <text class="tips-item">• TXT 文本文件（自动识别 UTF-8/GBK）</text>
         <text class="tips-item">• MD Markdown 文件</text>
+        <text class="tips-item">• EPUB 电子书</text>
       </view>
       <view class="import-tips">
         <text class="tips-title">章节识别规则</text>

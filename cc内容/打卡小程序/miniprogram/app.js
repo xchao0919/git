@@ -1,3 +1,23 @@
+// polyfill: jszip 依赖 setImmediate，微信小程序原生没有
+if (typeof setImmediate === 'undefined') {
+  const _immediateMap = {};
+  let _immediateId = 1;
+  global.setImmediate = (fn, ...args) => {
+    const id = _immediateId++;
+    _immediateMap[id] = setTimeout(() => {
+      delete _immediateMap[id];
+      try { fn(...args); } catch (e) { console.error(e); }
+    }, 0);
+    return id;
+  };
+  global.clearImmediate = (id) => {
+    if (_immediateMap[id]) {
+      clearTimeout(_immediateMap[id]);
+      delete _immediateMap[id];
+    }
+  };
+}
+
 App({
   globalData: {
     userInfo: null,

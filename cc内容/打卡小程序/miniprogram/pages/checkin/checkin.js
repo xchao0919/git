@@ -28,7 +28,8 @@ Page({
     bookInfo: null, // 书籍元信息
     readingRecording: false,
     readingDuration: 0,
-    readingTimer: null
+    readingTimer: null,
+    showChapterPickerView: false
   },
 
   onLoad(options) {
@@ -283,6 +284,28 @@ Page({
     const { bookInfo, currentChapter } = this.data;
     if (bookInfo && currentChapter < bookInfo.chapterCount - 1) {
       this.loadChapter(currentChapter + 1);
+    }
+  },
+
+  // 显示章节选择器
+  showChapterPicker() {
+    const { bookInfo } = this.data;
+    if (!bookInfo || !bookInfo.chapters || bookInfo.chapters.length === 0) return;
+    this.setData({ showChapterPickerView: true });
+  },
+
+  // 隐藏章节选择器
+  hideChapterPicker() {
+    this.setData({ showChapterPickerView: false });
+  },
+
+  // 选择章节
+  selectChapter(e) {
+    const { index } = e.currentTarget.dataset;
+    const idx = parseInt(index, 10);
+    this.setData({ showChapterPickerView: false });
+    if (idx !== this.data.currentChapter) {
+      this.loadChapter(idx);
     }
   },
 

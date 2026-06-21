@@ -99,6 +99,7 @@
   left: 0;
   right: 0;
   padding: 20rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   background: #fff;
   box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 }

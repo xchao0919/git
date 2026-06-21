@@ -124,8 +124,8 @@
 }
 
 .role-tag {
-  font-size: 22rpx;
-  padding: 4rpx 16rpx;
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
   border-radius: 20rpx;
 }
 
@@ -211,6 +211,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 30rpx;
+  min-height: 88rpx;
+  box-sizing: border-box;
   border-bottom: 1rpx solid #f0f0f0;
 }
 

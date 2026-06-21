@@ -40,7 +40,10 @@
       <text class="book-title">📚 {{bookInfo.title}}</text>
       <view class="chapter-nav">
         <button class="nav-btn" bindtap="prevChapter" disabled="{{currentChapter === 0}}">上一章</button>
-        <text class="chapter-index">第 {{currentChapter + 1}}/{{bookInfo.chapterCount}} 章</text>
+        <view class="chapter-index {{bookInfo.chapters && bookInfo.chapters.length ? 'clickable' : ''}}" bindtap="showChapterPicker">
+          第 {{currentChapter + 1}}/{{bookInfo.chapterCount}} 章
+          <text class="chapter-index-arrow" wx:if="{{bookInfo.chapters && bookInfo.chapters.length}}">▾</text>
+        </view>
         <button class="nav-btn" bindtap="nextChapter" disabled="{{currentChapter >= bookInfo.chapterCount - 1}}">下一章</button>
       </view>
     </view>
@@ -93,6 +96,8 @@
           value="{{formData.text}}"
           bindinput="handleTextInput"
           maxlength="500"
+          adjust-position="{{true}}"
+          cursor-spacing="80"
         ></textarea>
         <text class="word-count">{{formData.text.length}}/500</text>
       </view>
@@ -112,6 +117,8 @@
           value="{{formData.text}}"
           bindinput="handleTextInput"
           maxlength="500"
+          adjust-position="{{true}}"
+          cursor-spacing="80"
         ></textarea>
         <text class="word-count">{{formData.text.length}}/500</text>
       </view>
@@ -217,5 +224,28 @@
     <view class="picker-empty" wx:if="{{myGroups.length === 0}}">
       <text>暂无群组，请先加入群组</text>
     </view>
+  </view>
+</view>
+
+<!-- 章节选择器 -->
+<view class="picker-mask" wx:if="{{showChapterPickerView}}" bindtap="hideChapterPicker">
+  <view class="picker-content" catchtap="">
+    <view class="picker-header">
+      <text class="picker-title">选择章节</text>
+      <text class="picker-close" bindtap="hideChapterPicker">✕</text>
+    </view>
+    <scroll-view class="picker-list chapter-picker-list" scroll-y="true">
+      <view
+        class="picker-item {{index === currentChapter ? 'active' : ''}}"
+        wx:for="{{bookInfo.chapters}}"
+        wx:key="index"
+        bindtap="selectChapter"
+        data-index="{{index}}"
+      >
+        <text class="chapter-picker-num">第 {{index + 1}} 章</text>
+        <text class="chapter-picker-title">{{item.title}}</text>
+        <text class="picker-check" wx:if="{{index === currentChapter}}">✓</text>
+      </view>
+    </scroll-view>
   </view>
 </view>

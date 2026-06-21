@@ -16,10 +16,12 @@
 .tab-item {
   flex: 1;
   text-align: center;
-  padding: 16rpx 0;
+  padding: 24rpx 0;
   font-size: 28rpx;
   color: #666;
   position: relative;
+  min-height: 88rpx;
+  box-sizing: border-box;
 }
 
 .tab-item.active {
@@ -87,7 +89,7 @@
 .group-meta {
   display: flex;
   align-items: center;
-  font-size: 22rpx;
+  font-size: 24rpx;
   color: #999;
 }
 
@@ -123,7 +125,7 @@
 .create-fab {
   position: fixed;
   right: 40rpx;
-  bottom: 140rpx;
+  bottom: calc(140rpx + env(safe-area-inset-bottom));
   width: 100rpx;
   height: 100rpx;
   background: #4A90D9;

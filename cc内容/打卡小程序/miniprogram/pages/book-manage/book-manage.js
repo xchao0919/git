@@ -1,5 +1,32 @@
 const app = getApp();
 const util = require('../../utils/util');
+const textParser = require('../../utils/text-parser');
+
+// jszip 依赖 setImmediate，小程序里没有，必须在 require jszip 前补上
+(function () {
+  const root = (typeof globalThis !== 'undefined') ? globalThis
+            : (typeof global !== 'undefined') ? global
+            : (typeof window !== 'undefined') ? window
+            : this;
+  if (typeof root.setImmediate !== 'function') {
+    const map = {};
+    let nextId = 1;
+    root.setImmediate = function (fn) {
+      const args = Array.prototype.slice.call(arguments, 1);
+      const id = nextId++;
+      map[id] = setTimeout(function () {
+        delete map[id];
+        try { fn.apply(null, args); } catch (e) { console.error(e); }
+      }, 0);
+      return id;
+    };
+    root.clearImmediate = function (id) {
+      if (map[id]) { clearTimeout(map[id]); delete map[id]; }
+    };
+  }
+})();
+
+const JSZip = require('../../libs/jszip.min.js');
 
 Page({
   data: {
@@ -171,7 +198,7 @@ Page({
       const res = await wx.chooseMessageFile({
         count: 1,
         type: 'file',
-        extension: ['txt', 'md', 'text']
+        extension: ['txt', 'md', 'text', 'epub']
       });
 
       const file = res.tempFiles[0];
@@ -179,12 +206,22 @@ Page({
 
       util.showLoading('正在解析文件...');
 
-      // 读取文件内容
-      const content = await this.readFileContent(file.path);
-      console.log('文件内容长度:', content.length);
+      // 根据扩展名提取纯文本
+      const ext = (file.name.split('.').pop() || '').toLowerCase();
+      let rawText;
+      if (ext === 'epub') {
+        rawText = await this.extractEpubText(file.path);
+      } else {
+        rawText = await this.readFileContent(file.path);
+      }
+      console.log('文件内容长度:', rawText.length);
 
-      // 解析章节
-      const chapters = this.parseChapters(content, file.name);
+      // 统一换行符
+      const text = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+      // 解析章节（移植自 text_tool.py）
+      const parsed = textParser.parseContent(text, 1000, true);
+      const chapters = textParser.toBookChapters(parsed);
       console.log('解析出的章节数:', chapters.length);
 
       if (chapters.length === 0) {
@@ -193,7 +230,7 @@ Page({
       }
 
       // 提取书名
-      const bookTitle = this.extractBookTitle(file.name);
+      const bookTitle = textParser.extractBookTitle(file.name);
 
       // 保存书籍
       await this.saveBook(bookTitle, chapters);
@@ -219,6 +256,64 @@ Page({
     }
   },
 
+  // 从 epub 提取纯文本（zip + XHTML）
+  async extractEpubText(filePath) {
+    const fs = wx.getFileSystemManager();
+    const buf = await new Promise((resolve, reject) => {
+      fs.readFile({
+        filePath,
+        success: (res) => resolve(res.data),
+        fail: (err) => reject(new Error('读取 epub 失败：' + (err.errMsg || '')))
+      });
+    });
+
+    console.log('epub buf 类型:', Object.prototype.toString.call(buf), '长度:', buf && buf.byteLength);
+
+    // jszip 在小程序里对 Uint8Array 兼容性更好
+    const uint8 = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+    const zip = await JSZip.loadAsync(uint8);
+
+    const names = Object.keys(zip.files)
+      .filter(n => /\.(xhtml|html|htm)$/i.test(n) && !zip.files[n].dir)
+      .sort();
+
+    if (names.length === 0) {
+      throw new Error('epub 内未找到 XHTML/HTML 文件');
+    }
+
+    const parts = [];
+    for (const name of names) {
+      const html = await zip.files[name].async('string');
+      const text = this.htmlToText(html);
+      if (text) parts.push(text);
+    }
+    return parts.join('\n\n');
+  },
+
+  // 简易 HTML → 纯文本
+  htmlToText(html) {
+    // 去 script/style/head
+    html = html.replace(/<script[\s\S]*?<\/script>/gi, '')
+               .replace(/<style[\s\S]*?<\/style>/gi, '')
+               .replace(/<head[\s\S]*?<\/head>/gi, '');
+    // block 标签前后加换行
+    html = html.replace(/<\/?(p|div|br|h[1-6]|li|tr|section|article|header|footer|blockquote)[^>]*>/gi, '\n');
+    // 去所有标签
+    html = html.replace(/<[^>]+>/g, '');
+    // 解码常见 HTML 实体
+    html = html.replace(/&nbsp;/g, ' ')
+               .replace(/&amp;/g, '&')
+               .replace(/&lt;/g, '<')
+               .replace(/&gt;/g, '>')
+               .replace(/&quot;/g, '"')
+               .replace(/&#39;/g, "'");
+    // 压缩空白
+    html = html.replace(/[ \t]+/g, ' ')
+               .replace(/\n[ \t]+/g, '\n')
+               .replace(/\n{3,}/g, '\n\n');
+    return html.trim();
+  },
+
   // 读取文件内容
   readFileContent(filePath) {
     return new Promise((resolve, reject) => {
@@ -242,101 +337,7 @@ Page({
     });
   },
 
-  // 解析章节
-  parseChapters(content, fileName) {
-    const chapters = [];
-
-    // 尝试多种章节分隔符
-    const patterns = [
-      /^第[零一二三四五六七八九十百千万\d]+[章节回集篇][\s\S]*?(?=^第[零一二三四五六七八九十百千万\d]+[章节回集篇]|$)/gm,
-      /^Chapter\s*\d+[\s\S]*?(?=^Chapter\s*\d+|$)/gim,
-      /^CHAPTER\s*\d+[\s\S]*?(?=^CHAPTER\s*\d+|$)/gm,
-      /^#+\s*.+[\s\S]*?(?=^#+\s*.+|$)/gm,
-    ];
-
-    // 方案1: 使用"第X章"格式
-    let matches = content.match(patterns[0]);
-    if (matches && matches.length > 0) {
-      matches.forEach((match, index) => {
-        const lines = match.trim().split('\n');
-        const title = lines[0].trim();
-        const body = lines.slice(1).join('\n').trim();
-        if (body) {
-          chapters.push({
-            title: title.replace(/^[第\s]+/, '第'),
-            content: body
-          });
-        }
-      });
-      if (chapters.length > 0) return chapters;
-    }
-
-    // 方案2: 使用"Chapter X"格式
-    matches = content.match(patterns[1]);
-    if (matches && matches.length > 0) {
-      matches.forEach((match, index) => {
-        const lines = match.trim().split('\n');
-        const title = lines[0].trim();
-        const body = lines.slice(1).join('\n').trim();
-        if (body) {
-          chapters.push({ title, content: body });
-        }
-      });
-      if (chapters.length > 0) return chapters;
-    }
-
-    // 方案3: 使用 Markdown 标题格式
-    matches = content.match(patterns[3]);
-    if (matches && matches.length > 0) {
-      matches.forEach((match, index) => {
-        const lines = match.trim().split('\n');
-        const title = lines[0].replace(/^#+\s*/, '').trim();
-        const body = lines.slice(1).join('\n').trim();
-        if (body) {
-          chapters.push({ title, content: body });
-        }
-      });
-      if (chapters.length > 0) return chapters;
-    }
-
-    // 方案4: 按空行分割，每段作为一个章节
-    const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
-    if (paragraphs.length >= 1) {
-      // 如果段落太少，按固定字数分割
-      if (paragraphs.length < 3) {
-        const chunkSize = 2000; // 每章约2000字
-        for (let i = 0; i < content.length; i += chunkSize) {
-          const chunk = content.slice(i, i + chunkSize).trim();
-          if (chunk) {
-            chapters.push({
-              title: `第 ${Math.floor(i / chunkSize) + 1} 节`,
-              content: chunk
-            });
-          }
-        }
-      } else {
-        paragraphs.forEach((p, index) => {
-          if (p.trim().length > 50) { // 忽略太短的段落
-            chapters.push({
-              title: `第 ${index + 1} 节`,
-              content: p.trim()
-            });
-          }
-        });
-      }
-    }
-
-    return chapters;
-  },
-
-  // 提取书名
-  extractBookTitle(fileName) {
-    // 移除扩展名
-    let title = fileName.replace(/\.(txt|md|text)$/i, '');
-    // 移除常见前缀
-    title = title.replace(/^《|》$/g, '');
-    return title || '共读书籍';
-  },
+  // 解析章节与提取书名的逻辑已迁移到 utils/text-parser.js
 
   // 保存书籍
   async saveBook(title, chapters) {
